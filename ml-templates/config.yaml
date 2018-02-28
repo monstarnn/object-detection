@@ -1,0 +1,184 @@
+kind: MLApp
+metadata:
+  name: tensorflow
+spec:
+  package_manager: "pip2"
+  packages:
+    - names:
+      {{- range $i, $value := .packages }}
+      - "{{ $value }}"
+      {{- end }}
+      manager: "pip2"
+  tasks:
+  - name: prepare-data
+    resources:
+    - name: upload
+      replicas: 1
+      restartPolicy: Never
+      maxRestartCount: 1
+      allowFail: true
+      images:
+        cpu: busybox
+      command: "echo \"Uploading Data\";echo \"Done!!!\""
+      workdir: "$DATA_DIR"
+      volumes:
+      - name: data
+  - name: standalone
+    resources:
+    - name: worker
+      replicas: 1
+      restartPolicy: Never
+      maxRestartCount: 0
+      allowFail: true
+      images:
+        gpu: "kuberlab/tf-object-detection:1.7.0-dev-gpu"
+        cpu: "kuberlab/tf-object-detection:1.7.0-dev"
+      command: 'sed -i -e "s|%DATADIR%|$DATA_DIR|g" faster_rcnn_resnet101_pets.config; python -m object_detection/train --train_dir $TRAINING_DIR/$BUILD_ID --pipeline_config_path faster_rcnn_resnet101_pets.config'
+      workdir: "$SRC_DIR"
+      resources:
+        accelerators:
+          gpu: 0
+        requests:
+          cpu: 100m
+          memory: 1Gi
+        limits:
+          cpu: 1000m
+          memory: 8Gi
+      default_volume_mapping: true
+  - name: export
+    resources:
+    - name: worker
+      replicas: 1
+      restartPolicy: Never
+      maxRestartCount: 0
+      allowFail: true
+      images:
+        gpu: "kuberlab/tf-object-detection:1.7.0-dev-gpu"
+        cpu: "kuberlab/tf-object-detection:1.7.0-dev"
+      command: "echo \"BUILD: $BUILD_ID\"; python hello.py"
+      workdir: "$SRC_DIR"
+      resources:
+        accelerators:
+          gpu: 0
+        requests:
+          cpu: 100m
+          memory: 64Mi
+        limits:
+          cpu: 1000m
+          memory: 4Gi
+      default_volume_mapping: true
+  - name: workflow
+    resources:
+    - name: tasks
+      replicas: 1
+      restartPolicy: Never
+      maxRestartCount: 0
+      allowFail: true
+      images:
+        gpu: "kuberlab/tf-object-detection:1.7.0-dev-gpu"
+        cpu: "kuberlab/tf-object-detection:1.7.0-dev"
+      command: python run_tasks.py
+      workdir: "$SRC_DIR"
+      resources:
+        accelerators:
+          gpu: 0
+        requests:
+          cpu: 100m
+          memory: 64Mi
+        limits:
+          cpu: 500m
+          memory: 1Gi
+      default_volume_mapping: true
+  uix:
+  - name: jupyter
+    displayName: Jupyter
+    images:
+      gpu: "kuberlab/mlboard-jupyter-tensorflow:1.5.0-gpu"
+      cpu: "kuberlab/mlboard-jupyter-tensorflow:1.5.0"
+    resources:
+      requests:
+        cpu: 100m
+        memory: 64Mi
+      limits:
+        cpu: 1000m
+        memory: 4Gi
+    ports:
+    - port: 8888
+      targetPort: 8888
+      protocol: TCP
+      name: http
+    default_volume_mapping: true
+  - name: tensorboard
+    displayName: Tensorboard
+    command: "tensorboard --logdir=$TRAINING_DIR"
+    images:
+      cpu: "lsheiba/tensorflow-ls-devel"
+    ports:
+    - port: 6006
+      targetPort: 6006
+      protocol: TCP
+      name: http
+    resources:
+      requests:
+        cpu: 50m
+        memory: 64Mi
+      limits:
+        cpu: 1000m
+        memory: 2Gi
+    volumes:
+    - name: training
+  serving:
+  - name: serving
+    displayName: Serving
+    {{- if .tf_serving }}
+    images:
+      gpu: "kuberlab/tf-object-detection:1.7.0-dev-gpu"
+      cpu: "kuberlab/tf-object-detection:1.7.0-dev"
+    command: tensorflow_model_server
+    args: "--port={{ .serving_port }} --model_name=object-detection --model_base_path=/model"
+    {{- else }}
+    workdir: "$SRC_DIR"
+    command: python hello.py
+    {{- end }}
+    resources:
+      accelerators:
+        gpu: 0
+      requests:
+        cpu: 100m
+        memory: 128Mi
+      limits:
+        cpu: 1000m
+        memory: 4Gi
+    ports:
+    - port: {{ .serving_port }}
+      targetPort: {{ .serving_port }}
+      protocol: TCP
+      name: http
+    default_volume_mapping: true
+  volumes:
+  - isLibDir: false
+    mountPath: /notebooks/training
+    name: training
+    clusterStorage: {{ .storage.value }}
+    subPath: training
+  - gitRepo:
+      repository: https://github.com/kuberlab-catalog/object-detection
+    isLibDir: false
+    mountPath: /notebooks/src
+    name: src
+    subPath: object-detection/src
+  - isLibDir: true
+    mountPath: /notebooks/lib
+    name: lib
+    clusterStorage: {{ .storage.value }}
+    subPath: lib
+  - isLibDir: false
+    mountPath: /notebooks/data
+    name: data
+    clusterStorage: {{ .storage.value }}
+    subPath: {{ .data_path }}
+  - isLibDir: false
+    mountPath: /notebooks
+    name: code
+    subPath: code
+    clusterStorage: {{ .storage.value }}

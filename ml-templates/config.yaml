@@ -173,12 +173,11 @@ spec:
     clusterStorage: {{ .storage.value }}
     subPath: lib
   - isLibDir: false
-    mountPath: /notebooks/data
-    name: data
-    clusterStorage: {{ .storage.value }}
-    subPath: {{ .data_path }}
-  - isLibDir: false
     mountPath: /notebooks
     name: code
     subPath: code
+    clusterStorage: {{ .storage.value }}
+  - isLibDir: false
+    mountPath: /notebooks/data
+    name: data
     clusterStorage: {{ .storage.value }}

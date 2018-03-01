@@ -33,11 +33,43 @@ spec:
       images:
         gpu: "kuberlab/tf-object-detection:1.7.0-dev-gpu"
         cpu: "kuberlab/tf-object-detection:1.7.0-dev"
-      command: 'sed -i -e "s|%DATADIR%|$DATA_DIR|g" faster_rcnn_resnet101_pets.config; python -m object_detection/train --train_dir $TRAINING_DIR/$BUILD_ID --pipeline_config_path faster_rcnn_resnet101_pets.config'
+      command: >-
+        sed -i -e "s|%DATADIR%|$DATA_DIR|g" faster_rcnn_resnet101_pets.config;
+        python -m object_detection/train
+        --train_dir $TRAINING_DIR/$BUILD_ID
+        --pipeline_config_path faster_rcnn_resnet101_pets.config
       workdir: "$SRC_DIR"
       resources:
         accelerators:
-          gpu: 0
+          gpu: 1
+        requests:
+          cpu: 100m
+          memory: 2Gi
+        limits:
+          cpu: 2000m
+          memory: 16Gi
+      default_volume_mapping: true
+  - name: eval
+    resources:
+    - name: worker
+      replicas: 1
+      restartPolicy: Never
+      maxRestartCount: 0
+      allowFail: true
+      images:
+        gpu: "kuberlab/tf-object-detection:1.7.0-dev-gpu"
+        cpu: "kuberlab/tf-object-detection:1.7.0-dev"
+      command: >-
+        BUILD=16;
+        sed -i -e "s|%DATADIR%|$DATA_DIR|g" faster_rcnn_resnet101_pets.config;
+        python -m object_detection/eval
+        --checkpoint_dir=$TRAINING_DIR/$BUILD
+        --eval_dir=$TRAINING_DIR/eval/$BUILD
+        --pipeline_config_path faster_rcnn_resnet101_pets.config
+      workdir: "$SRC_DIR"
+      resources:
+        accelerators:
+          gpu: 1
         requests:
           cpu: 100m
           memory: 1Gi
@@ -55,7 +87,15 @@ spec:
       images:
         gpu: "kuberlab/tf-object-detection:1.7.0-dev-gpu"
         cpu: "kuberlab/tf-object-detection:1.7.0-dev"
-      command: "echo \"BUILD: $BUILD_ID\"; python hello.py"
+      command: >-
+        CHECKPOINT=1;
+        BUILD=15;
+        sed -i -e "s|%DATADIR%|$DATA_DIR|g" faster_rcnn_resnet101_pets.config;
+        python -m object_detection/export_inference_graph
+        --input_type image_tensor
+        --pipeline_config_path faster_rcnn_resnet101_pets.config
+        --trained_checkpoint_prefix $TRAINING_DIR/$BUILD/model.ckpt-${CHECKPOINT}
+        --output_directory $CODE_DIR/model-$BUILD
       workdir: "$SRC_DIR"
       resources:
         accelerators:

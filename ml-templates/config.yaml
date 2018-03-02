@@ -172,8 +172,8 @@ spec:
     displayName: Serving
     {{- if .tf_serving }}
     images:
-      gpu: "kuberlab/tf-object-detection:1.7.0-dev-gpu"
-      cpu: "kuberlab/tf-object-detection:1.7.0-dev"
+      gpu: "kuberlab/tensorflow-serving:latest-gpu"
+      cpu: "kuberlab/tensorflow-serving:latest"
     command: tensorflow_model_server
     args: "--port={{ .serving_port }} --model_name=object-detection --model_base_path=/model"
     {{- else }}

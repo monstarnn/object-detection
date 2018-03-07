@@ -174,8 +174,7 @@ spec:
     images:
       gpu: "kuberlab/tensorflow-serving:latest-gpu"
       cpu: "kuberlab/tensorflow-serving:latest"
-    command: tensorflow_model_server
-    args: "--port={{ .serving_port }} --model_name=object-detection --model_base_path=/model"
+    command: 'tensorflow_model_server --port={{ .serving_port }} --model_name=object-detection --model_base_path=/model'
     {{- else }}
     workdir: "$SRC_DIR"
     command: python hello.py
@@ -193,7 +192,7 @@ spec:
     - port: {{ .serving_port }}
       targetPort: {{ .serving_port }}
       protocol: TCP
-      name: http
+      name: grpc
     default_volume_mapping: true
   volumes:
   - isLibDir: false

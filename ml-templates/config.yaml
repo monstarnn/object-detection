@@ -88,14 +88,15 @@ spec:
         gpu: "kuberlab/tf-object-detection:1.7.0-dev-gpu"
         cpu: "kuberlab/tf-object-detection:1.7.0-dev"
       command: >-
-        CHECKPOINT=1;
-        BUILD=15;
+        CHECKPOINT=50000;
+        BUILD=16;
         sed -i -e "s|%DATADIR%|$DATA_DIR|g" faster_rcnn_resnet101_pets.config;
         python -m object_detection/export_inference_graph
-        --input_type image_tensor
+        --input_type encoded_image_string_tensor
         --pipeline_config_path faster_rcnn_resnet101_pets.config
         --trained_checkpoint_prefix $TRAINING_DIR/$BUILD/model.ckpt-${CHECKPOINT}
-        --output_directory $CODE_DIR/model-$BUILD
+        --output_directory /model/$BUILD;
+        python -c "from mlboardclient.api import client; m = client.Client(); m.model_upload('object-detection-pets', '1.0.0', '/model/$BUILD/saved_model/1')"
       workdir: "$SRC_DIR"
       resources:
         accelerators:

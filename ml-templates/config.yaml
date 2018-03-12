@@ -134,8 +134,8 @@ spec:
   - name: jupyter
     displayName: Jupyter
     images:
-      gpu: "kuberlab/mlboard-jupyter-tensorflow:1.5.0-gpu"
-      cpu: "kuberlab/mlboard-jupyter-tensorflow:1.5.0"
+      gpu: "kuberlab/tf-object-detection:1.7.0-dev-gpu"
+      cpu: "kuberlab/tf-object-detection:1.7.0-dev"
     resources:
       requests:
         cpu: 100m

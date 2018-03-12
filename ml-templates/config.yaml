@@ -10,19 +10,6 @@ spec:
       {{- end }}
       manager: "pip2"
   tasks:
-  - name: prepare-data
-    resources:
-    - name: upload
-      replicas: 1
-      restartPolicy: Never
-      maxRestartCount: 1
-      allowFail: true
-      images:
-        cpu: busybox
-      command: "echo \"Uploading Data\";echo \"Done!!!\""
-      workdir: "$DATA_DIR"
-      volumes:
-      - name: data
   - name: standalone
     resources:
     - name: worker

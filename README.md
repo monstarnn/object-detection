@@ -18,6 +18,24 @@ task **eval**: it takes last tensorflow training checkpoint and log some images 
 **tensorboard**. As the model training progresses, task **eval** can be performed many times to see the
 detection correctness for the model.
 
+## Export model
+
+TBD
+
+# Run serving, request and detection
+
+There is a pre-trained [object-detection-pets model](https://go.kuberlab.io/kuberlab-demo/catalog/mlmodel/object-detection-pets)
+which can be used for serving already. Use the following command to start serving on KuberLab (by clicking *Serve* in model view):
+
+```
+tensorflow_model_server --port=9000 --model_name=object-detection-pets --model_base_path=/model
+```
+
+Then open your project's jupyter and find notebook **run_serving.ipynb** in **src** directory.
+Adjust here serving host to form **<serving-name>.<namespace>.svc.cluster.local**. Upload some example pet image,
+say, from [here](http://www.dogexpress.in/wp-content/uploads/2017/10/Pet-Dog-Registration-Panchkula-660x330.jpg) and put
+it to **pet.jpg** (or anywhere else and adjust **IMAGE_FILE**)
+
 # Preparing Inputs
 
 If you want to create you own dataset, please refer to section

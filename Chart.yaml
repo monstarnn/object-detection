@@ -3,12 +3,9 @@ Engine: gotpl
 Home: http://kuberlab.com
 Icon: https://github.com/kuberlab-catalog/models/raw/master/research/object_detection/g3doc/img/oxford_pet.png
 Keywords:
-- kubernetes
 - tensorflow
-- object-detection
-- template
+- computervision
 - kuberlab
-- kuberlabapptemplate
 Maintainers:
 - Email: nmahotkin@kuberlab.com
   Name: Nikolay Mahotkin

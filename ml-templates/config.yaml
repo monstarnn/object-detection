@@ -3,12 +3,6 @@ metadata:
   name: tensorflow
 spec:
   package_manager: "pip2"
-  packages:
-    - names:
-      {{- range $i, $value := .packages }}
-      - "{{ $value }}"
-      {{- end }}
-      manager: "pip2"
   tasks:
   - name: standalone
     resources:
@@ -18,8 +12,8 @@ spec:
       maxRestartCount: 0
       allowFail: true
       images:
-        gpu: "kuberlab/tf-object-detection:1.7.0-dev-gpu"
-        cpu: "kuberlab/tf-object-detection:1.7.0-dev"
+        gpu: "kuberlab/tf-object-detection:1.9.0-gpu"
+        cpu: "kuberlab/tf-object-detection:1.9.0"
       command: >-
         sed -i -e "s|%DATADIR%|$DATA_DIR|g" faster_rcnn_resnet101_pets.config;
         python -m object_detection/train
@@ -44,8 +38,8 @@ spec:
       maxRestartCount: 0
       allowFail: true
       images:
-        gpu: "kuberlab/tf-object-detection:1.7.0-dev-gpu"
-        cpu: "kuberlab/tf-object-detection:1.7.0-dev"
+        gpu: "kuberlab/tf-object-detection:1.9.0-gpu"
+        cpu: "kuberlab/tf-object-detection:1.9.0"
       command: >-
         BUILD=16;
         sed -i -e "s|%DATADIR%|$DATA_DIR|g" faster_rcnn_resnet101_pets.config;
@@ -72,8 +66,8 @@ spec:
       maxRestartCount: 0
       allowFail: true
       images:
-        gpu: "kuberlab/tf-object-detection:1.7.0-dev-gpu"
-        cpu: "kuberlab/tf-object-detection:1.7.0-dev"
+        gpu: "kuberlab/tf-object-detection:1.9.0-gpu"
+        cpu: "kuberlab/tf-object-detection:1.9.0"
       command: >-
         CHECKPOINT=50000;
         BUILD=16;
@@ -95,34 +89,12 @@ spec:
           cpu: 1000m
           memory: 4Gi
       default_volume_mapping: true
-  - name: workflow
-    resources:
-    - name: tasks
-      replicas: 1
-      restartPolicy: Never
-      maxRestartCount: 0
-      allowFail: true
-      images:
-        gpu: "kuberlab/tf-object-detection:1.7.0-dev-gpu"
-        cpu: "kuberlab/tf-object-detection:1.7.0-dev"
-      command: python run_tasks.py
-      workdir: "$SRC_DIR"
-      resources:
-        accelerators:
-          gpu: 0
-        requests:
-          cpu: 100m
-          memory: 64Mi
-        limits:
-          cpu: 500m
-          memory: 1Gi
-      default_volume_mapping: true
   uix:
   - name: jupyter
     displayName: Jupyter
     images:
-      gpu: "kuberlab/tf-object-detection:1.7.0-dev-gpu"
-      cpu: "kuberlab/tf-object-detection:1.7.0-dev"
+      gpu: "kuberlab/tf-object-detection:1.9.0-gpu"
+      cpu: "kuberlab/tf-object-detection:1.9.0"
     resources:
       requests:
         cpu: 100m
@@ -158,15 +130,11 @@ spec:
   serving:
   - name: serving
     displayName: Serving
-    {{- if .tf_serving }}
     images:
-      gpu: "kuberlab/tensorflow-serving:latest-gpu"
-      cpu: "kuberlab/tensorflow-serving:latest"
-    command: 'tensorflow_model_server --port={{ .serving_port }} --model_name=object-detection --model_base_path=/model'
-    {{- else }}
+      gpu: "kuberlab/serving:latest-gpu"
+      cpu: "kuberlab/serving:latest"
+    command: 'kuberlab-serving --port={{ .serving_port }} --model-path=/model'
     workdir: "$SRC_DIR"
-    command: python hello.py
-    {{- end }}
     resources:
       accelerators:
         gpu: 0
@@ -183,14 +151,11 @@ spec:
       name: grpc
     default_volume_mapping: true
   volumes:
-  - isLibDir: false
-    mountPath: /notebooks/training
+  - mountPath: /notebooks/training
     name: training
     clusterStorage: {{ .storage.value }}
-    subPath: training
   - gitRepo:
       repository: https://github.com/kuberlab-catalog/object-detection
-    isLibDir: false
     mountPath: /notebooks/src
     name: src
     subPath: object-detection/src
@@ -198,13 +163,16 @@ spec:
     mountPath: /notebooks/lib
     name: lib
     clusterStorage: {{ .storage.value }}
-    subPath: lib
-  - isLibDir: false
-    mountPath: /notebooks
+  - mountPath: /notebooks
     name: code
-    subPath: code
     clusterStorage: {{ .storage.value }}
-  - isLibDir: false
-    mountPath: /notebooks/data
+  - mountPath: /notebooks/data
     name: data
+    {{- if .dataset.value }}
+    datasetFS:
+      dataset: {{ .dataset.value }}
+      workspace: {{ .dataset.workspace }}
+      version: {{ .dataset.version }}
+    {{- else }}
     clusterStorage: {{ .storage.value }}
+    {{- end }}

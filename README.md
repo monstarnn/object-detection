@@ -4,7 +4,7 @@ Tensorflow object-detection training
 
 ## Running training and model
 
-[Object detection pets dataset](https://go.kuberlab.io/kuberlab-demo/catalog/dataset/object-detection-pets/readme/) contains:
+[Object detection pets dataset](https://cloud.kuberlab.io/kuberlab-demo/catalog/dataset/object-detection-pets/readme/) contains:
 
  - pets tensorflow record
  - pets label map
@@ -24,7 +24,7 @@ TBD
 
 # Run serving, request and detection
 
-There is a pre-trained [object-detection-pets model](https://go.kuberlab.io/kuberlab-demo/catalog/mlmodel/object-detection-pets)
+There is a pre-trained [object-detection-pets model](https://cloud.kuberlab.io/kuberlab-demo/catalog/mlmodel/object-detection-pets)
 which can be used for serving already. Use the following command to start serving on KuberLab (by clicking *Serve* in model view):
 
 ```

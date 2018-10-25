@@ -4,7 +4,7 @@ metadata:
 spec:
   package_manager: "pip2"
   tasks:
-  - name: standalone
+  - name: train
     resources:
     - name: worker
       replicas: 1
@@ -15,7 +15,7 @@ spec:
         gpu: "kuberlab/tf-object-detection:1.9.0-gpu"
         cpu: "kuberlab/tf-object-detection:1.9.0"
       command: >-
-        sed -i -e "s|%DATADIR%|$DATA_DIR|g" faster_rcnn_resnet101_pets.config;
+        sed -i -e "s|%DATADIR%|$DATA_DIR|g" -e "s|num_steps: 50000|num_steps: 1000|g" faster_rcnn_resnet101_pets.config;
         python -m object_detection/train
         --train_dir $TRAINING_DIR/$BUILD_ID
         --pipeline_config_path faster_rcnn_resnet101_pets.config
@@ -42,7 +42,7 @@ spec:
         cpu: "kuberlab/tf-object-detection:1.9.0"
       command: >-
         BUILD=16;
-        sed -i -e "s|%DATADIR%|$DATA_DIR|g" -e "s|num_steps: 50000|num_steps: 1000|g" faster_rcnn_resnet101_pets.config;
+        sed -i -e "s|%DATADIR%|$DATA_DIR|g" faster_rcnn_resnet101_pets.config;
         python -m object_detection/eval
         --checkpoint_dir=$TRAINING_DIR/$BUILD
         --eval_dir=$TRAINING_DIR/eval/$BUILD

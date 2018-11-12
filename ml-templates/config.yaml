@@ -112,7 +112,8 @@ spec:
     displayName: Tensorboard
     command: "tensorboard --logdir=$TRAINING_DIR"
     images:
-      cpu: "lsheiba/tensorflow-ls-devel"
+      gpu: "kuberlab/tensorflow:gpu-27-1.9.0-full"
+      cpu: "kuberlab/tensorflow:cpu-27-1.9.0-full"
     ports:
     - port: 6006
       targetPort: 6006

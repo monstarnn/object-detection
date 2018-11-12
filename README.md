@@ -12,7 +12,7 @@ Tensorflow object-detection training
 
 To perform training, install this project on cluster using KuberLab platform.
 Edit the source named **data** and connect it to dataset **object-detection-pets** (from the link above).
-Then, it is ready to start training: run task named **standalone**.
+Then, it is ready to start training: run task named **train**.
 Training with current settings will take several hours. However, while training is running we can start
 task **eval**: it takes last tensorflow training checkpoint and log some images with detections to
 **tensorboard**. As the model training progresses, task **eval** can be performed many times to see the

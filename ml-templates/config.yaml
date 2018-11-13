@@ -77,7 +77,7 @@ spec:
         --pipeline_config_path faster_rcnn_resnet101_pets.config
         --trained_checkpoint_prefix $TRAINING_DIR/$BUILD/model.ckpt-${CHECKPOINT}
         --output_directory /model/$BUILD;
-        python -c "from mlboardclient.api import client; m = client.Client(); m.model_upload('object-detection-pets', '1.0.0', '/model/$BUILD/saved_model/1')"
+        python -c "from mlboardclient.api import client; m = client.Client(); m.update_task_info({'checkpoint_path': '/model/$BUILD/saved_model/1'})"
       workdir: "$SRC_DIR"
       resources:
         accelerators:
@@ -151,6 +151,13 @@ spec:
       protocol: TCP
       name: grpc
     default_volume_mapping: true
+    spec:
+      outMimeType: text/plain
+      rawInput: true
+      model: any
+      params:
+        - name: inputs
+          type: bytes
   volumes:
   - mountPath: /notebooks/training
     name: training

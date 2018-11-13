@@ -2,7 +2,7 @@
 
 Tensorflow object-detection training
 
-## Running training and model
+## Running training
 
 [Object detection pets dataset](https://cloud.kuberlab.io/kuberlab-demo/catalog/dataset/object-detection-pets/readme/) contains:
 
@@ -20,7 +20,18 @@ detection correctness for the model.
 
 ## Export model
 
-TBD
+To export model, need to adjust some parameters for task **export**:
+
+Change the execution command as follows:
+
+* Specify **CHECKPOINT** var according to num steps in task train
+* Specify **BUILD** var according to build id (task number) of task train
+
+Then run task **export**. It will export TensorFlow saved model to the specified directory.
+
+For saving the model to the catalog, find the job associated with task **export**,
+click **options (...)** -> **Export**. Type name of the model - **object-detection-pets** (or give another name)
+and version - **1.0.0** (or another).
 
 # Run serving, request and detection
 
@@ -28,7 +39,7 @@ There is a pre-trained [object-detection-pets model](https://cloud.kuberlab.io/k
 which can be used for serving already. Use the following command to start serving on KuberLab (by clicking *Serve* in model view):
 
 ```
-tensorflow_model_server --port=9000 --model_name=object-detection-pets --model_base_path=/model
+kuberlab-serving --driver tensorflow --port=9000 --model-path=/model
 ```
 
 Then open your project's jupyter and find notebook **run_serving.ipynb** in **src** directory.

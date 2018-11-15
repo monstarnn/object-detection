@@ -11,7 +11,7 @@ def main():
     t = open("faster_rcnn_resnet101_pets.config.template", "r")
     template = jinja2.Template(t.read())
     t.close()
-    tw = open("faster_rcnn_resnet101_pets.config2", "w+")
+    tw = open("faster_rcnn_resnet101_pets.config", "w+")
     tw.write(str(template.render(args=args)))
     tw.close()
 

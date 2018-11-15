@@ -15,7 +15,7 @@ SUCCEEDED = 'Succeeded'
 
 logging.basicConfig(level=logging.INFO)
 LOG = logging.getLogger(__name__)
-# mlboard = client.Client()
+mlboard = client.Client()
 run_tasks = ['train', 'eval', 'export']
 
 

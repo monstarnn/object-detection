@@ -1,7 +1,7 @@
 name: pipeline
 resources:
 - workDir: $SRC_DIR
-  command: python pipeline.py {{ .data_dir }} --num_steps={{ .num_steps }}
+  command: ./pipeline.sh {{ .data_dir }} --num_steps={{ .num_steps }}
   default_volume_mapping: true
   images:
     cpu: kuberlab/tensorflow:cpu-36-1.7.0-full

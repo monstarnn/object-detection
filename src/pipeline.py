@@ -6,7 +6,7 @@ import logging
 import re
 import sys
 
-from jinja2 import Template
+# from jinja2 import Template
 
 from mlboardclient.api import client
 
@@ -77,12 +77,12 @@ def main():
     #     override_args['train-classifier']['model'] = '$FACENET_DIR/facenet.xml'
     #     override_args['validate-classifier']['model'] = '$FACENET_DIR/facenet.xml'
 
-    t = open("faster_rcnn_resnet101_pets.config.template", "r")
-    template = Template(t.read())
-    t.close()
-    tw = open("faster_rcnn_resnet101_pets.config", "w+")
-    tw.write(str(template.render(args=args)))
-    tw.close()
+    # t = open("faster_rcnn_resnet101_pets.config.template", "r")
+    # template = Template(t.read())
+    # t.close()
+    # tw = open("faster_rcnn_resnet101_pets.config", "w+")
+    # tw.write(str(template.render(args=args)))
+    # tw.close()
 
     app = mlboard.apps.get()
 

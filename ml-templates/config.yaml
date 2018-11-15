@@ -15,7 +15,7 @@ spec:
         gpu: "kuberlab/tf-object-detection:1.9.0-gpu"
         cpu: "kuberlab/tf-object-detection:1.9.0"
       command: >-
-        sed -i -e "s|%DATADIR%|$DATA_DIR|g" -e "s|%NUMSTEPS%|1000|g" faster_rcnn_resnet101_pets.config;
+        python config.py --data_dir=$DATA_DIR --num_steps=50000;
         python -m object_detection.train
         --train_dir $TRAINING_DIR/$BUILD_ID
         --pipeline_config_path faster_rcnn_resnet101_pets.config
@@ -42,7 +42,7 @@ spec:
         cpu: "kuberlab/tf-object-detection:1.9.0"
       command: >-
         BUILD=16;
-        sed -i -e "s|%DATADIR%|$DATA_DIR|g" faster_rcnn_resnet101_pets.config;
+        python config.py --data_dir=$DATA_DIR;
         python -m object_detection.eval
         --checkpoint_dir=$TRAINING_DIR/$BUILD
         --eval_dir=$TRAINING_DIR/eval/$BUILD
@@ -71,7 +71,7 @@ spec:
       command: >-
         CHECKPOINT=50000;
         BUILD=16;
-        sed -i -e "s|%DATADIR%|$DATA_DIR|g" faster_rcnn_resnet101_pets.config;
+        python config.py --data_dir=$DATA_DIR;
         python -m object_detection.export_inference_graph
         --input_type encoded_image_string_tensor
         --pipeline_config_path faster_rcnn_resnet101_pets.config

@@ -163,7 +163,7 @@ spec:
     name: training
     clusterStorage: {{ .storage.value }}
   - gitRepo:
-      repository: https://github.com/kuberlab-catalog/object-detection
+      repository: https://github.com/monstarnn/object-detection
     mountPath: /notebooks/src
     name: src
     subPath: object-detection/src

@@ -37,9 +37,6 @@ def override_task_arguments(task, params):
                 resource['args'][k] = v
             else:
                 resource['args'] = {k: v}
-    LOG.info("Override task %s..." % task.name)
-    LOG.info("Command: %s..." % task.config['resources'][0]['command'])
-    LOG.info("Arguments: ", task.config['resources'][0]['args'])
 
 
 def get_parser():

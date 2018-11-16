@@ -15,11 +15,17 @@ spec:
         gpu: "kuberlab/tf-object-detection:1.9.0-gpu"
         cpu: "kuberlab/tf-object-detection:1.9.0"
       command: >-
+        sed -i -e "s|%DATADIR%|$DATA_DIR|g" -e "s|num_steps: 50000|num_steps: 1000|g" $SRC_DIR/faster_rcnn_resnet101_pets.config;
+        python object_detection/model_main.py
+        --model_dir $TRAINING_DIR/$BUILD_ID
+        --pipeline_config_path $SRC_DIR/faster_rcnn_resnet101_pets.config
+        --num_train_steps=1000
+
         python config.py --data_dir=$DATA_DIR --num_steps=50000 ;
         python -m object_detection.train
         --train_dir $TRAINING_DIR/$BUILD_ID
         --pipeline_config_path faster_rcnn_resnet101_pets.config
-      workdir: "$SRC_DIR"
+      workdir: "$RESEARCH_DIR"
       resources:
         accelerators:
           gpu: 1
@@ -30,6 +36,9 @@ spec:
           cpu: 2000m
           memory: 16Gi
       default_volume_mapping: true
+      env:
+      - name: PYTHONPATH
+        value: /notebooks/research
   - name: eval
     resources:
     - name: worker
@@ -41,13 +50,20 @@ spec:
         gpu: "kuberlab/tf-object-detection:1.9.0-gpu"
         cpu: "kuberlab/tf-object-detection:1.9.0"
       command: >-
+        BUILD=1;
+        sed -i -e "s|%DATADIR%|$DATA_DIR|g" $SRC_DIR/faster_rcnn_resnet101_pets.config;
+        python object_detection/eval.py
+        --checkpoint_dir=$TRAINING_DIR/$BUILD
+        --eval_dir=$TRAINING_DIR/eval/$BUILD
+        --pipeline_config_path $SRC_DIR/faster_rcnn_resnet101_pets.config
+
         BUILD=16;
         python config.py --data_dir=$DATA_DIR ;
         python -m object_detection.eval
         --checkpoint_dir=$TRAINING_DIR/$BUILD
         --eval_dir=$TRAINING_DIR/eval/$BUILD
         --pipeline_config_path faster_rcnn_resnet101_pets.config
-      workdir: "$SRC_DIR"
+      workdir: "$RESEARCH_DIR"
       resources:
         accelerators:
           gpu: 1
@@ -58,6 +74,9 @@ spec:
           cpu: 1000m
           memory: 8Gi
       default_volume_mapping: true
+      env:
+      - name: PYTHONPATH
+        value: /notebooks/research
   - name: export
     resources:
     - name: worker
@@ -70,6 +89,16 @@ spec:
         cpu: "kuberlab/tf-object-detection:1.9.0"
       command: >-
         CHECKPOINT=50000;
+        BUILD=1;
+        sed -i -e "s|%DATADIR%|$DATA_DIR|g" $SRC_DIR/faster_rcnn_resnet101_pets.config;
+        python object_detection/export_inference_graph.py
+        --input_type encoded_image_string_tensor
+        --pipeline_config_path $SRC_DIR/faster_rcnn_resnet101_pets.config
+        --trained_checkpoint_prefix $TRAINING_DIR/$BUILD/model.ckpt-${CHECKPOINT}
+        --output_directory /model/$BUILD;
+        python -c "from mlboardclient.api import client; m = client.Client(); m.update_task_info({'checkpoint_path': '/model/$BUILD/saved_model/1'})"
+
+        CHECKPOINT=50000;
         BUILD=16;
         python config.py --data_dir=$DATA_DIR ;
         python -m object_detection.export_inference_graph
@@ -78,7 +107,7 @@ spec:
         --trained_checkpoint_prefix $TRAINING_DIR/$BUILD/model.ckpt-${CHECKPOINT}
         --output_directory /model/$BUILD;
         python -c "from mlboardclient.api import client; m = client.Client(); m.update_task_info({'checkpoint_path': '/model/$BUILD/saved_model/1'})"
-      workdir: "$SRC_DIR"
+      workdir: "$RESEARCH_DIR"
       resources:
         accelerators:
           gpu: 0
@@ -89,6 +118,9 @@ spec:
           cpu: 1000m
           memory: 4Gi
       default_volume_mapping: true
+      env:
+      - name: PYTHONPATH
+        value: /notebooks/research
   uix:
   - name: jupyter
     displayName: Jupyter
@@ -108,6 +140,9 @@ spec:
       protocol: TCP
       name: http
     default_volume_mapping: true
+    env:
+    - name: PYTHONPATH
+      value: /notebooks/research
   - name: tensorboard
     displayName: Tensorboard
     command: "tensorboard --logdir=$TRAINING_DIR"
@@ -181,6 +216,16 @@ spec:
       dataset: {{ .dataset.value }}
       workspace: {{ .dataset.workspace }}
       version: {{ .dataset.version }}
+    {{- else }}
+    clusterStorage: {{ .storage.value }}
+    {{- end }}
+  - mountPath: /notebooks/research
+    name: research
+    {{- if .code.value }}
+    model:
+      model: {{ .code.value }}
+      workspace: {{ .code.workspace }}
+      version: {{ .code.version }}
     {{- else }}
     clusterStorage: {{ .storage.value }}
     {{- end }}

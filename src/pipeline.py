@@ -43,6 +43,8 @@ def get_parser():
     parser = argparse.ArgumentParser()
     # parser.add_argument('data_dir')
     parser.add_argument('--num_train_steps')
+    parser.add_argument('--model_name')
+    parser.add_argument('--model_version')
     # parser.add_argument('--convert', type=boolean_string, default=False)
     # parser.add_argument('--push-model', type=boolean_string, default=False)
 
@@ -86,6 +88,8 @@ def main():
 
     app = mlboard.apps.get()
 
+    last_build = ''
+
     faces_set = None
     for task in run_tasks:
         t = app.tasks.get(task)
@@ -100,7 +104,15 @@ def main():
         if t.name in override_args and override_args[t.name]:
             override_task_arguments(t, override_args[t.name])
 
+        cmd = t.config['resources'][0]['command']
+        cmd.replace('BUILD=1', 'BUILD=%s' % last_build)
+        cmd.replace('CHECKPOINT=1000', 'CHECKPOINT=%s' % args.num_train_steps)
+        cmd.replace('MODEL_NAME=object-detection', 'MODEL_NAME=%s' % args.model_name)
+        cmd.replace('MODEL_VERSION=1.0.0', 'MODEL_VERSION=%s' % args.model_version)
+
         LOG.info("Start task %s..." % t.name)
+        LOG.info("Command: %s" % t.config['resources'][0]['command'])
+
         started = t.start()
 
         LOG.info(
@@ -125,6 +137,9 @@ def main():
             "Task %s-%s completed with status %s."
             % (completed.name, completed.build, completed.status)
         )
+
+        last_build = completed.build
+
         # if task=='align-images':
         #     faces_set = completed.exec_info['push_version']
         #     LOG.info('Setup new faceset: {}'.format(faces_set))

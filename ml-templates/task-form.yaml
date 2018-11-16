@@ -1,11 +1,5 @@
-- name: data_dir
-  label: Data dir
-  type: string
-  value: $DATA_DIR
-  width: 50
-
 - name: num_steps
   label: Steps quantity
   type: int
-  value: 50000
+  value: 1000
   width: 50

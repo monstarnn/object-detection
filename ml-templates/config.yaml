@@ -55,7 +55,6 @@ spec:
         --pipeline_config_path $SRC_DIR/faster_rcnn_resnet101_pets.config
         --trained_checkpoint_prefix $TRAINING_DIR/$BUILD/model.ckpt-${CHECKPOINT}
         --output_directory $TRAINING_DIR/model/$BUILD;
-        python -c "from mlboardclient.api import client; m = client.Client(); m.model_upload('$MODEL_NAME', '$MODEL_VERSION', '$TRAINING_DIR/model/$BUILD/saved_model'); m.update_task_info({'model': '#/$WORKSPACE_NAME/catalog/mlmodel/$MODEL_NAME/versions/$MODEL_VERSION'})"
      workdir: "$RESEARCH_DIR"
       resources:
         accelerators:

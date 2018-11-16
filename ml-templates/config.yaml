@@ -20,11 +20,6 @@ spec:
         --model_dir $TRAINING_DIR/$BUILD_ID
         --pipeline_config_path $SRC_DIR/faster_rcnn_resnet101_pets.config
         --num_train_steps=1000
-
-        python config.py --data_dir=$DATA_DIR --num_steps=50000 ;
-        python -m object_detection.train
-        --train_dir $TRAINING_DIR/$BUILD_ID
-        --pipeline_config_path faster_rcnn_resnet101_pets.config
       workdir: "$RESEARCH_DIR"
       resources:
         accelerators:
@@ -56,13 +51,6 @@ spec:
         --checkpoint_dir=$TRAINING_DIR/$BUILD
         --eval_dir=$TRAINING_DIR/eval/$BUILD
         --pipeline_config_path $SRC_DIR/faster_rcnn_resnet101_pets.config
-
-        BUILD=16;
-        python config.py --data_dir=$DATA_DIR ;
-        python -m object_detection.eval
-        --checkpoint_dir=$TRAINING_DIR/$BUILD
-        --eval_dir=$TRAINING_DIR/eval/$BUILD
-        --pipeline_config_path faster_rcnn_resnet101_pets.config
       workdir: "$RESEARCH_DIR"
       resources:
         accelerators:
@@ -94,16 +82,6 @@ spec:
         python object_detection/export_inference_graph.py
         --input_type encoded_image_string_tensor
         --pipeline_config_path $SRC_DIR/faster_rcnn_resnet101_pets.config
-        --trained_checkpoint_prefix $TRAINING_DIR/$BUILD/model.ckpt-${CHECKPOINT}
-        --output_directory /model/$BUILD;
-        python -c "from mlboardclient.api import client; m = client.Client(); m.update_task_info({'checkpoint_path': '/model/$BUILD/saved_model/1'})"
-
-        CHECKPOINT=50000;
-        BUILD=16;
-        python config.py --data_dir=$DATA_DIR ;
-        python -m object_detection.export_inference_graph
-        --input_type encoded_image_string_tensor
-        --pipeline_config_path faster_rcnn_resnet101_pets.config
         --trained_checkpoint_prefix $TRAINING_DIR/$BUILD/model.ckpt-${CHECKPOINT}
         --output_directory /model/$BUILD;
         python -c "from mlboardclient.api import client; m = client.Client(); m.update_task_info({'checkpoint_path': '/model/$BUILD/saved_model/1'})"

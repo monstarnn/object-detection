@@ -2,7 +2,7 @@ kind: MLApp
 metadata:
   name: tensorflow
 spec:
-  package_manager: "pip2"
+  package_manager: "pip3"
   tasks:
   - name: train
     resources:
@@ -15,11 +15,12 @@ spec:
         gpu: "kuberlab/tf-object-detection:1.9.0-gpu"
         cpu: "kuberlab/tf-object-detection:1.9.0"
       command: >-
-        python config.py --data_dir=$DATA_DIR --num_steps=50000 ;
-        python -m object_detection.train
-        --train_dir $TRAINING_DIR/$BUILD_ID
-        --pipeline_config_path faster_rcnn_resnet101_pets.config
-      workdir: "$SRC_DIR"
+        sed -i -e "s|%DATADIR%|$DATA_DIR|g" $SRC_DIR/faster_rcnn_resnet101_pets.config;
+        python object_detection/model_main.py
+        --model_dir $TRAINING_DIR/$BUILD_ID
+        --pipeline_config_path $SRC_DIR/faster_rcnn_resnet101_pets.config
+        --num_train_steps=1000
+      workdir: "$RESEARCH_DIR"
       resources:
         accelerators:
           gpu: 1
@@ -30,34 +31,9 @@ spec:
           cpu: 2000m
           memory: 16Gi
       default_volume_mapping: true
-  - name: eval
-    resources:
-    - name: worker
-      replicas: 1
-      restartPolicy: Never
-      maxRestartCount: 0
-      allowFail: true
-      images:
-        gpu: "kuberlab/tf-object-detection:1.9.0-gpu"
-        cpu: "kuberlab/tf-object-detection:1.9.0"
-      command: >-
-        BUILD=16;
-        python config.py --data_dir=$DATA_DIR ;
-        python -m object_detection.eval
-        --checkpoint_dir=$TRAINING_DIR/$BUILD
-        --eval_dir=$TRAINING_DIR/eval/$BUILD
-        --pipeline_config_path faster_rcnn_resnet101_pets.config
-      workdir: "$SRC_DIR"
-      resources:
-        accelerators:
-          gpu: 1
-        requests:
-          cpu: 100m
-          memory: 1Gi
-        limits:
-          cpu: 1000m
-          memory: 8Gi
-      default_volume_mapping: true
+      env:
+      - name: PYTHONPATH
+        value: /notebooks/research
   - name: export
     resources:
     - name: worker
@@ -69,16 +45,18 @@ spec:
         gpu: "kuberlab/tf-object-detection:1.9.0-gpu"
         cpu: "kuberlab/tf-object-detection:1.9.0"
       command: >-
-        CHECKPOINT=50000;
-        BUILD=16;
-        python config.py --data_dir=$DATA_DIR ;
-        python -m object_detection.export_inference_graph
+        BUILD=1;
+        CHECKPOINT=1000;
+        MODEL_NAME=object-detection;
+        MODEL_VERSION=1.0.0;
+        sed -i -e "s|%DATADIR%|$DATA_DIR|g" $SRC_DIR/faster_rcnn_resnet101_pets.config;
+        python object_detection/export_inference_graph.py
         --input_type encoded_image_string_tensor
-        --pipeline_config_path faster_rcnn_resnet101_pets.config
+        --pipeline_config_path $SRC_DIR/faster_rcnn_resnet101_pets.config
         --trained_checkpoint_prefix $TRAINING_DIR/$BUILD/model.ckpt-${CHECKPOINT}
-        --output_directory /model/$BUILD;
-        python -c "from mlboardclient.api import client; m = client.Client(); m.update_task_info({'checkpoint_path': '/model/$BUILD/saved_model/1'})"
-      workdir: "$SRC_DIR"
+        --output_directory $TRAINING_DIR/model/$BUILD;
+        python -c "from mlboardclient.api import client; m = client.Client(); m.model_upload('$MODEL_NAME', '$MODEL_VERSION', '$TRAINING_DIR/model/$BUILD/saved_model'); m.update_task_info({'model': '#/$WORKSPACE_NAME/catalog/mlmodel/$MODEL_NAME/versions/$MODEL_VERSION'})"
+     workdir: "$RESEARCH_DIR"
       resources:
         accelerators:
           gpu: 0
@@ -89,6 +67,9 @@ spec:
           cpu: 1000m
           memory: 4Gi
       default_volume_mapping: true
+      env:
+      - name: PYTHONPATH
+        value: /notebooks/research
   uix:
   - name: jupyter
     displayName: Jupyter
@@ -108,6 +89,9 @@ spec:
       protocol: TCP
       name: http
     default_volume_mapping: true
+    env:
+    - name: PYTHONPATH
+      value: /notebooks/research
   - name: tensorboard
     displayName: Tensorboard
     command: "tensorboard --logdir=$TRAINING_DIR"
@@ -163,7 +147,7 @@ spec:
     name: training
     clusterStorage: {{ .storage.value }}
   - gitRepo:
-      repository: https://github.com/monstarnn/object-detection
+      repository: https://github.com/kuberlab-catalog/object-detection
     mountPath: /notebooks/src
     name: src
     subPath: object-detection/src
@@ -181,6 +165,16 @@ spec:
       dataset: {{ .dataset.value }}
       workspace: {{ .dataset.workspace }}
       version: {{ .dataset.version }}
+    {{- else }}
+    clusterStorage: {{ .storage.value }}
+    {{- end }}
+  - mountPath: /notebooks/research
+    name: research
+    {{- if .code.value }}
+    model:
+      model: {{ .code.value }}
+      workspace: {{ .code.workspace }}
+      version: {{ .code.version }}
     {{- else }}
     clusterStorage: {{ .storage.value }}
     {{- end }}

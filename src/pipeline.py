@@ -68,11 +68,11 @@ def main():
         if t.name in override_args and override_args[t.name]:
             override_task_arguments(t, override_args[t.name])
 
-        cmd = t.config['resources'][0]['command']
-        cmd = cmd.replace('BUILD=1', 'BUILD=%s' % last_build)
-        cmd = cmd.replace('CHECKPOINT=1000', 'CHECKPOINT=%s' % args.num_train_steps)
-        cmd = cmd.replace('MODEL_NAME=object-detection', 'MODEL_NAME=%s' % args.model_name)
-        cmd = cmd.replace('MODEL_VERSION=1.0.0', 'MODEL_VERSION=%s' % args.model_version)
+        r = t.config['resources'][0]
+        r['command'] = r['command'].replace('BUILD=1', 'BUILD=%s' % last_build)
+        r['command'] = r['command'].replace('CHECKPOINT=1000', 'CHECKPOINT=%s' % args.num_train_steps)
+        r['command'] = r['command'].replace('MODEL_NAME=object-detection', 'MODEL_NAME=%s' % args.model_name)
+        r['command'] = r['command'].replace('MODEL_VERSION=1.0.0', 'MODEL_VERSION=%s' % args.model_version)
 
         LOG.info("Start task %s..." % t.name)
         LOG.info("Command: %s" % t.config['resources'][0]['command'])

@@ -50,10 +50,6 @@ spec:
         MODEL_NAME=object-detection;
         MODEL_VERSION=1.0.0;
         sed -i -e "s|%DATADIR%|$DATA_DIR|g" $SRC_DIR/faster_rcnn_resnet101_pets.config;
-        python object_detection/export_inference_graph.py
-        --input_type encoded_image_string_tensor
-        --pipeline_config_path $SRC_DIR/faster_rcnn_resnet101_pets.config
-        --trained_checkpoint_prefix $TRAINING_DIR/$BUILD/model.ckpt-${CHECKPOINT}
      workdir: "$RESEARCH_DIR"
       resources:
         accelerators:

@@ -16,7 +16,7 @@ SUCCEEDED = 'Succeeded'
 logging.basicConfig(level=logging.INFO)
 LOG = logging.getLogger(__name__)
 mlboard = client.Client()
-run_tasks = ['train', 'export']
+run_tasks = ['train', 'eval', 'export']
 
 
 def override_task_arguments(task, params):
@@ -41,7 +41,7 @@ def override_task_arguments(task, params):
 
 def get_parser():
     parser = argparse.ArgumentParser()
-    # parser.add_argument('data_dir')
+    parser.add_argument('data_dir')
     parser.add_argument('--num_steps')
     # parser.add_argument('--convert', type=boolean_string, default=False)
     # parser.add_argument('--push-model', type=boolean_string, default=False)
@@ -55,15 +55,15 @@ def main():
 
     override_args = {
         'train': {
-            # 'data_dir': args.data_dir,
+            'data_dir': args.data_dir,
             'num_steps': args.num_steps,
         },
-        # 'eval': {
-        #     'data_dir': args.data_dir,
-        # },
-        # 'export': {
-        #     'data_dir': args.data_dir,
-        # },
+        'eval': {
+            'data_dir': args.data_dir,
+        },
+        'export': {
+            'data_dir': args.data_dir,
+        },
     }
 
     # if args.convert:

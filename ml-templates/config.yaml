@@ -54,7 +54,6 @@ spec:
         --input_type encoded_image_string_tensor
         --pipeline_config_path $SRC_DIR/faster_rcnn_resnet101_pets.config
         --trained_checkpoint_prefix $TRAINING_DIR/$BUILD/model.ckpt-${CHECKPOINT}
-        --output_directory $TRAINING_DIR/model/$BUILD;
      workdir: "$RESEARCH_DIR"
       resources:
         accelerators:

@@ -42,7 +42,7 @@ def override_task_arguments(task, params):
 def get_parser():
     parser = argparse.ArgumentParser()
     # parser.add_argument('data_dir')
-    parser.add_argument('--num_steps')
+    parser.add_argument('--num_train_steps')
     # parser.add_argument('--convert', type=boolean_string, default=False)
     # parser.add_argument('--push-model', type=boolean_string, default=False)
 
@@ -56,7 +56,7 @@ def main():
     override_args = {
         'train': {
             # 'data_dir': args.data_dir,
-            'num_steps': args.num_steps,
+            'num_train_steps': args.num_train_steps,
         },
         # 'eval': {
         #     'data_dir': args.data_dir,

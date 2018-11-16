@@ -1,5 +1,5 @@
-- name: num_steps
-  label: Steps quantity
+- name: num_train_steps
+  label: Train steps quantity
   type: int
   value: 1000
   width: 50

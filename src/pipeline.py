@@ -16,7 +16,10 @@ SUCCEEDED = 'Succeeded'
 logging.basicConfig(level=logging.INFO)
 LOG = logging.getLogger(__name__)
 mlboard = client.Client()
-run_tasks = ['train', 'export']
+run_tasks = [
+    # 'train',
+    'export',
+]
 
 
 def override_task_arguments(task, params):
@@ -88,7 +91,7 @@ def main():
 
     app = mlboard.apps.get()
 
-    last_build = ''
+    last_build = '5'
 
     faces_set = None
     for task in run_tasks:
@@ -105,10 +108,10 @@ def main():
             override_task_arguments(t, override_args[t.name])
 
         r = t.config['resources'][0]
-        r['command'].replace('BUILD=1', 'BUILD=%s' % last_build)
-        r['command'].replace('CHECKPOINT=1000', 'CHECKPOINT=%s' % args.num_train_steps)
-        r['command'].replace('MODEL_NAME=object-detection', 'MODEL_NAME=%s' % args.model_name)
-        r['command'].replace('MODEL_VERSION=1.0.0', 'MODEL_VERSION=%s' % args.model_version)
+        r['command'] = r['command'].replace('BUILD=1', 'BUILD=%s' % last_build)
+        r['command'] = r['command'].replace('CHECKPOINT=1000', 'CHECKPOINT=%s' % args.num_train_steps)
+        r['command'] = r['command'].replace('MODEL_NAME=object-detection', 'MODEL_NAME=%s' % args.model_name)
+        r['command'] = r['command'].replace('MODEL_VERSION=1.0.0', 'MODEL_VERSION=%s' % args.model_version)
 
         LOG.info("Start task %s..." % t.name)
         LOG.info("Command: %s" % t.config['resources'][0]['command'])

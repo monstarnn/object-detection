@@ -15,7 +15,7 @@ logging.basicConfig(level=logging.INFO)
 LOG = logging.getLogger(__name__)
 mlboard = client.Client()
 run_tasks = [
-    # 'train',
+    'train',
     'export',
 ]
 
@@ -53,6 +53,9 @@ def main():
     parser = get_parser()
     args = parser.parse_args()
 
+    print("next command is invalid")
+    print(asd.asd)
+
     override_args = {
         'train': {
             'num_train_steps': args.num_train_steps,
@@ -61,7 +64,7 @@ def main():
 
     app = mlboard.apps.get()
 
-    last_build = '5'
+    last_build = ''
 
     for task in run_tasks:
         t = app.tasks.get(task)
@@ -75,7 +78,6 @@ def main():
         r['command'] = r['command'].replace('MODEL_VERSION=1.0.0', 'MODEL_VERSION=%s' % args.model_version)
 
         LOG.info("Start task %s..." % t.name)
-        LOG.info("Command: %s" % t.config['resources'][0]['command'])
 
         started = t.start()
 

@@ -19,7 +19,7 @@ spec:
         --research_dir $RESEARCH_DIR
         --data_dir $DATA_DIR
         --model_dir $TRAINING_DIR/$BUILD_ID
-      workdir: "$RESEARCH_DIR"
+      workdir: "$SRC_DIR"
       resources:
         accelerators:
           gpu: 1

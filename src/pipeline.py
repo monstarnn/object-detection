@@ -15,7 +15,7 @@ logging.basicConfig(level=logging.INFO)
 LOG = logging.getLogger(__name__)
 mlboard = client.Client()
 run_tasks = [
-    'train',
+    # 'train',
     'export',
 ]
 
@@ -81,11 +81,13 @@ def main():
 
     app = mlboard.apps.get()
 
-    last_build = ''
+    last_build = '10'
 
     for task in run_tasks:
         t = app.tasks.get(task)
         if t.name in override_args and override_args[t.name]:
+            if 'build' in override_args[t.name]:
+                override_args[t.name]['build'] = last_build
             override_task_arguments(t, override_args[t.name])
 
         print('task %s' % t.name)

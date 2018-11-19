@@ -45,9 +45,9 @@ def get_parser():
     parser.add_argument('--num_steps')
     parser.add_argument('--model_name')
     parser.add_argument('--model_version')
-    parser.add_argument('--research_dir')
-    parser.add_argument('--data_dir')
-    parser.add_argument('--model_dir')
+    # parser.add_argument('--research_dir')
+    # parser.add_argument('--data_dir')
+    # parser.add_argument('--model_dir')
     parser.add_argument('--resize_min_dimension')
     parser.add_argument('--resize_max_dimension')
     parser.add_argument('--resize_fixed_width')
@@ -68,9 +68,9 @@ def main():
             'resize_max_dimension': args.resize_max_dimension,
             'resize_fixed_width': args.resize_fixed_width,
             'resize_fixed_height': args.resize_fixed_height,
-            'research_dir': args.research_dir,
-            'data_dir': args.data_dir,
-            'model_dir': args.model_dir,
+            # 'research_dir': args.research_dir,
+            # 'data_dir': args.data_dir,
+            # 'model_dir': args.model_dir,
         },
         'export': {
             'model_name': args.model_name,

@@ -54,7 +54,8 @@ def main():
     args = parser.parse_args()
 
     print("next command is invalid")
-    print(asd.asd)
+    print(args['asd'].asd)
+    return
 
     override_args = {
         'train': {

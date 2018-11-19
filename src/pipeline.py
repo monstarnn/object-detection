@@ -53,10 +53,6 @@ def main():
     parser = get_parser()
     args = parser.parse_args()
 
-    print("next command is invalid")
-    print(args['asd'].asd)
-    return
-
     override_args = {
         'train': {
             'num_train_steps': args.num_train_steps,
@@ -81,6 +77,11 @@ def main():
         LOG.info("Start task %s..." % t.name)
 
         started = t.start()
+
+        print("next command is invalid")
+        print(args['asd'].asd)
+        return
+
 
         LOG.info(
             "Run & wait [name=%s, build=%s, status=%s]"

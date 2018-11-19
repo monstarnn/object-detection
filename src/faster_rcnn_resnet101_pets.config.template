@@ -8,14 +8,17 @@ model {
   faster_rcnn {
     num_classes: 37
     image_resizer {
+      {% if args.resize_min_dimension > 0 %}
       keep_aspect_ratio_resizer {
-        min_dimension: 600
-        max_dimension: 1024
+        min_dimension: {{ args.resize_min_dimension }}
+        max_dimension: {{ args.resize_max_dimension }}
       }
-      #fixed_shape_resizer {
-      #  height: 512
-      #  width: 512
-      #}
+      {% else %}
+      fixed_shape_resizer {
+        height: {{ args.resize_fixed_width }}
+        width: {{ args.resize_fixed_height }}
+      }
+      {% endif %}
     }
     feature_extractor {
       type: 'faster_rcnn_resnet101'
@@ -133,7 +136,7 @@ eval_config: {
   num_examples: 1101
   # Note: The below line limits the evaluation process to 10 evaluations.
   # Remove the below line to evaluate indefinitely.
-  max_evals: 10
+  #max_evals: 10
 }
 
 eval_input_reader: {
@@ -144,3 +147,4 @@ eval_input_reader: {
   shuffle: false
   num_readers: 1
 }
+

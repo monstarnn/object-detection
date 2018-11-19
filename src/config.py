@@ -42,7 +42,9 @@ def build_config():
     template = jinja2.Template(t.read())
     t.close()
     tw = open("faster_rcnn_resnet101_pets.config", "w+")
-    tw.write(str(template.render(args=targs)))
+    cfg = str(template.render(args=targs))
+    print(cfg)
+    tw.write(cfg)
     tw.close()
 
 

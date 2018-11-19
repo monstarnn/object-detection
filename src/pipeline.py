@@ -89,8 +89,9 @@ def main():
             override_task_arguments(t, override_args[t.name])
 
         print('task %s' % t.name)
-        print('command %s' % t.command)
-        print('arguments', t.args)
+        r = t.config['resources'][0]
+        print('command %s' % r.command)
+        print('arguments', r.args)
 
         # r = t.config['resources'][0]
         # r['command'] = r['command'].replace('BUILD=1', 'BUILD=%s' % last_build)

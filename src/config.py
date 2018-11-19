@@ -22,6 +22,7 @@ def build_config():
         'resize_max_dimension': args.resize_max_dimension,
         'resize_fixed_width': args.resize_fixed_width,
         'resize_fixed_height': args.resize_fixed_height,
+        'num_steps': args.num_steps,
     }
 
     if targs['resize_min_dimension'] == 0 or targs['resize_min_dimension'] == 0:

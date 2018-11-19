@@ -42,21 +42,41 @@ def override_task_arguments(task, params):
 
 def get_parser():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--num_train_steps')
+    parser.add_argument('--num_steps')
     parser.add_argument('--model_name')
     parser.add_argument('--model_version')
+    parser.add_argument('--research_dir')
+    parser.add_argument('--data_dir')
+    parser.add_argument('--model_dir')
+    parser.add_argument('--resize_min_dimension')
+    parser.add_argument('--resize_max_dimension')
+    parser.add_argument('--resize_fixed_width')
+    parser.add_argument('--resize_fixed_height')
+    parser.add_argument('--build')
 
     return parser
 
 
 def main():
     parser = get_parser()
-    args = parser.parse_args()
+    args, _ = parser.parse_known_args()
 
     override_args = {
         'train': {
-            'num_train_steps': args.num_train_steps,
+            'num_steps': args.num_steps,
+            'resize_min_dimension': args.resize_min_dimension,
+            'resize_max_dimension': args.resize_max_dimension,
+            'resize_fixed_width': args.resize_fixed_width,
+            'resize_fixed_height': args.resize_fixed_height,
+            'research_dir': args.research_dir,
+            'data_dir': args.data_dir,
+            'model_dir': args.model_dir,
         },
+        'export': {
+            'model_name': args.model_name,
+            'model_version': args.model_version,
+            'build': args.build,
+        }
     }
 
     app = mlboard.apps.get()
@@ -68,20 +88,19 @@ def main():
         if t.name in override_args and override_args[t.name]:
             override_task_arguments(t, override_args[t.name])
 
-        r = t.config['resources'][0]
-        r['command'] = r['command'].replace('BUILD=1', 'BUILD=%s' % last_build)
-        r['command'] = r['command'].replace('CHECKPOINT=1000', 'CHECKPOINT=%s' % args.num_train_steps)
-        r['command'] = r['command'].replace('MODEL_NAME=object-detection', 'MODEL_NAME=%s' % args.model_name)
-        r['command'] = r['command'].replace('MODEL_VERSION=1.0.0', 'MODEL_VERSION=%s' % args.model_version)
+        print('task %s' % t.name)
+        print('command %s' % t.command)
+        print('arguments', t.args)
+
+        # r = t.config['resources'][0]
+        # r['command'] = r['command'].replace('BUILD=1', 'BUILD=%s' % last_build)
+        # r['command'] = r['command'].replace('CHECKPOINT=1000', 'CHECKPOINT=%s' % args.num_train_steps)
+        # r['command'] = r['command'].replace('MODEL_NAME=object-detection', 'MODEL_NAME=%s' % args.model_name)
+        # r['command'] = r['command'].replace('MODEL_VERSION=1.0.0', 'MODEL_VERSION=%s' % args.model_version)
 
         LOG.info("Start task %s..." % t.name)
 
         started = t.start()
-
-        print("next command is invalid")
-        print(args['asd'].asd)
-        return
-
 
         LOG.info(
             "Run & wait [name=%s, build=%s, status=%s]"

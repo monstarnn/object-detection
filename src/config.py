@@ -8,7 +8,7 @@ def main():
 def build_config():
 
     parser = argparse.ArgumentParser()
-    parser.add_argument('--data_dir')
+    parser.add_argument('--data_dir', default='')
     parser.add_argument('--num_steps', default=50000)
     parser.add_argument('--resize_min_dimension', type=positive_int, default=600)
     parser.add_argument('--resize_max_dimension', type=positive_int, default=1024)
@@ -34,6 +34,10 @@ def build_config():
 
     if targs['resize_min_dimension'] == 0 and targs['resize_fixed_width'] == 0:
         raise Exception('it should be set positive resize_min_dimension with resize_max_dimension or resize_fixed_width with resize_fixed_height')
+    if targs['num_steps'] == 0:
+        raise Exception('num_steps must be positive')
+    if targs['data_dir'] == '':
+        raise Exception('data_dir is not set')
 
     # print(targs)
     # print(targs['resize_min_dimension'])
@@ -43,7 +47,7 @@ def build_config():
     t.close()
     tw = open("faster_rcnn_resnet101_pets.config", "w+")
     cfg = str(template.render(args=targs))
-    print(cfg)
+    # print(cfg)
     tw.write(cfg)
     tw.close()
 

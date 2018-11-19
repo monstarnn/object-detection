@@ -26,10 +26,10 @@ def main():
     targs.append("faster_rcnn_resnet101_pets.config")
 
     targs.append("--trained_checkpoint_prefix")
-    targs.append("$TRAINING_DIR/"+targs['build']+"/model.ckpt-"+targs['num_steps'])
+    targs.append("$TRAINING_DIR/%s/model.ckpt-%s" % (targs['build'], targs['num_steps']))
 
     targs.append("--output_directory")
-    targs.append("$TRAINING_DIR/model/"+targs['build'])
+    targs.append("$TRAINING_DIR/model/%s" % targs['build'])
 
     print(check_output(targs))
 

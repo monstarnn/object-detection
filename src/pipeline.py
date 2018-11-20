@@ -34,10 +34,13 @@ def override_task_arguments(task, params):
             )
         else:
             # Add
+            val = v
+            if isinstance(v, list):
+                val = " ".join(v)
             if 'args' in resource:
-                resource['args'][k] = v
+                resource['args'][k] = val
             else:
-                resource['args'] = {k: v}
+                resource['args'] = {k: val}
 
             print("!!!! type", k, type(resource['args'][k]))
             print("!!!! val", k, resource['args'][k])

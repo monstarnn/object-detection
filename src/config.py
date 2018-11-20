@@ -9,7 +9,7 @@ def build_config():
 
     parser = argparse.ArgumentParser()
     parser.add_argument('--data_dir', default='')
-    parser.add_argument('--num_steps', default=50000)
+    parser.add_argument('--num_steps', default=1000)
     parser.add_argument('--resize_min_dimension', type=positive_int, default=600)
     parser.add_argument('--resize_max_dimension', type=positive_int, default=1024)
     parser.add_argument('--resize_fixed_width', type=positive_int, default=0)

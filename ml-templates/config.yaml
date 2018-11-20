@@ -50,7 +50,8 @@ spec:
         --data_dir $DATA_DIR
         --training_dir $TRAINING_DIR
         --training_build_id 1
-      workdir: "$RESEARCH_DIR"
+        --checkpoint 1000
+      workdir: "$SRC_DIR"
       resources:
         accelerators:
           gpu: 0

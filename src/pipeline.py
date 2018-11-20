@@ -52,7 +52,8 @@ def get_parser():
     parser.add_argument('--resize_max_dimension')
     parser.add_argument('--resize_fixed_width')
     parser.add_argument('--resize_fixed_height')
-    parser.add_argument('--build')
+    parser.add_argument('--training_build_id')
+    parser.add_argument('--training_checkpoint')
 
     return parser
 
@@ -75,19 +76,21 @@ def main():
         'export': {
             'model_name': args.model_name,
             'model_version': args.model_version,
-            'build': args.build,
+            'training_build_id': args.training_build_id,
+            'training_checkpoint': args.training_checkpoint,
         }
     }
 
     app = mlboard.apps.get()
 
-    last_build = ''
+    training_build_id = ''
+    training_checkpoint = ''
 
     for task in run_tasks:
         t = app.tasks.get(task)
         if t.name in override_args and override_args[t.name]:
-            if 'build' in override_args[t.name]:
-                override_args[t.name]['build'] = last_build
+            if 'training_build_id' in override_args[t.name]:
+                override_args[t.name]['training_build_id'] = training_build_id
             override_task_arguments(t, override_args[t.name])
 
         print('task %s' % t.name)
@@ -128,7 +131,9 @@ def main():
             % (completed.name, completed.build, completed.status)
         )
 
-        last_build = completed.build
+        if t.name == 'training':
+            training_build_id = completed.build
+            training_checkpoint = args.num_steps
 
     LOG.info("Workflow completed with status SUCCESS")
 

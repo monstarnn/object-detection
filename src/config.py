@@ -29,6 +29,9 @@ def build_config():
         'grid_aspect_ratios': args.grid_aspect_ratios,
     }
 
+    print('!! grid_scales', targs['grid_scales'])
+    print('!! grid_aspect_ratios', targs['grid_aspect_ratios'])
+
     if targs['resize_min_dimension'] == 0 or targs['resize_min_dimension'] == 0:
         targs['resize_min_dimension'] = 0
         targs['resize_max_dimension'] = 0

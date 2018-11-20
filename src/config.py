@@ -25,8 +25,8 @@ def build_config():
         'resize_max_dimension': args.resize_max_dimension,
         'resize_fixed_width': args.resize_fixed_width,
         'resize_fixed_height': args.resize_fixed_height,
-        'grid_scales': args.grid_scales,
-        'grid_aspect_ratios': args.grid_aspect_ratios,
+        'grid_scales': args.grid_scales.split(","),
+        'grid_aspect_ratios': args.grid_aspect_ratios.split(","),
     }
 
     if targs['resize_min_dimension'] == 0 or targs['resize_min_dimension'] == 0:

@@ -32,15 +32,17 @@ def main():
     targs.append("--output_directory")
     targs.append("%s/model/%s" % (args.training_dir, args.train_build_id))
 
+
+    # print(check_output(targs))
+
     print(targs)
-    return
-
-    print(check_output(targs))
-
 
     m = client.Client()
-    m.model_upload('$MODEL_NAME', '$MODEL_VERSION', '$TRAINING_DIR/model/$BUILD/saved_model')
-    m.update_task_info({'model': '#/$WORKSPACE_NAME/catalog/mlmodel/$MODEL_NAME/versions/$MODEL_VERSION'})
+    print(args.model_name, args.model_version, '$TRAINING_DIR/model/%s/saved_model' % (args.train_build_id))
+    # m.model_upload('$MODEL_NAME', '$MODEL_VERSION', '$TRAINING_DIR/model/$BUILD/saved_model')
+    m.update_task_info({
+        'model': '#/$WORKSPACE_NAME/catalog/mlmodel/%s/versions/%s' % (args.model_name, args.model_version),
+    })
 
     # BUILD=1; CHECKPOINT=1000; MODEL_NAME=object-detection; MODEL_VERSION=1.0.0;
     # sed -i -e "s|%DATADIR%|$DATA_DIR|g" $SRC_DIR/faster_rcnn_resnet101_pets.config;

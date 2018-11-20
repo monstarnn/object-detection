@@ -24,10 +24,11 @@ def main():
 
     # print(check_output(targs))
 
-    m = client.Client()
-    parser.add_argument('--train_build_id')
-    parser.add_argument('--train_checkpoint')
-    m.update_task_info({'train_build_id': args.build_id, 'train_checkpoint': args.num_steps})
+    # m = client.Client()
+    client.Client().update_task_info({
+        'train_build_id': args.build_id,
+        'train_checkpoint': args.num_steps,
+    })
 
     print(targs)
     return

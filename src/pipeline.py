@@ -67,14 +67,16 @@ def main():
     print('known_args', args)
 
     override_args = {
+        '_common': {
+            'grid_scales': args.grid_scales,
+            'grid_aspect_ratios': args.grid_aspect_ratios,
+        },
         'train': {
             'num_steps': args.num_steps,
             'resize_min_dimension': args.resize_min_dimension,
             'resize_max_dimension': args.resize_max_dimension,
             'resize_fixed_width': args.resize_fixed_width,
             'resize_fixed_height': args.resize_fixed_height,
-            'grid_scales': args.grid_scales,
-            'grid_aspect_ratios': args.grid_aspect_ratios,
             # 'research_dir': args.research_dir,
             # 'data_dir': args.data_dir,
             # 'model_dir': args.model_dir,
@@ -100,6 +102,7 @@ def main():
             if 'train_checkpoint' in override_args[t.name]:
                 override_args[t.name]['train_checkpoint'] = train_checkpoint
             override_task_arguments(t, override_args[t.name])
+        override_task_arguments(t, override_args['_common'])
 
         print('task %s' % t.name)
         r = t.config['resources'][0]

@@ -14,8 +14,8 @@ def build_config():
     parser.add_argument('--resize_max_dimension', type=positive_int, default=1024)
     parser.add_argument('--resize_fixed_width', type=positive_int, default=0)
     parser.add_argument('--resize_fixed_height', type=positive_int, default=0)
-    parser.add_argument('--grid_scales')
-    parser.add_argument('--grid_aspect_ratios')
+    parser.add_argument('--grid_scales', nargs='+', default=[0.25, 0.5, 1.0, 2.0])
+    parser.add_argument('--grid_aspect_ratios', nargs='+', default=[0.5, 1.0, 2.0])
     args, _ = parser.parse_known_args()
 
     targs = {
@@ -25,8 +25,8 @@ def build_config():
         'resize_max_dimension': args.resize_max_dimension,
         'resize_fixed_width': args.resize_fixed_width,
         'resize_fixed_height': args.resize_fixed_height,
-        'grid_scales': args.grid_scales.split(","),
-        'grid_aspect_ratios': args.grid_aspect_ratios.split(","),
+        'grid_scales': args.grid_scales,
+        'grid_aspect_ratios': args.grid_aspect_ratios,
     }
 
     if targs['resize_min_dimension'] == 0 or targs['resize_min_dimension'] == 0:

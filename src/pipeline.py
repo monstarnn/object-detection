@@ -42,18 +42,12 @@ def override_task_arguments(task, params):
             else:
                 resource['args'] = {k: val}
 
-            print("!!!! type", k, type(resource['args'][k]))
-            print("!!!! val", k, resource['args'][k])
-
 
 def get_parser():
     parser = argparse.ArgumentParser()
     parser.add_argument('--num_steps')
     parser.add_argument('--model_name')
     parser.add_argument('--model_version')
-    # parser.add_argument('--research_dir')
-    # parser.add_argument('--data_dir')
-    # parser.add_argument('--model_dir')
     parser.add_argument('--resize_min_dimension')
     parser.add_argument('--resize_max_dimension')
     parser.add_argument('--resize_fixed_width')
@@ -83,9 +77,6 @@ def main():
             'resize_max_dimension': args.resize_max_dimension,
             'resize_fixed_width': args.resize_fixed_width,
             'resize_fixed_height': args.resize_fixed_height,
-            # 'research_dir': args.research_dir,
-            # 'data_dir': args.data_dir,
-            # 'model_dir': args.model_dir,
         },
         'export': {
             'model_name': args.model_name,
@@ -114,12 +105,6 @@ def main():
         r = t.config['resources'][0]
         print('command %s' % r['command'])
         print('arguments', r['args'])
-
-        # r = t.config['resources'][0]
-        # r['command'] = r['command'].replace('BUILD=1', 'BUILD=%s' % last_build)
-        # r['command'] = r['command'].replace('CHECKPOINT=1000', 'CHECKPOINT=%s' % args.num_train_steps)
-        # r['command'] = r['command'].replace('MODEL_NAME=object-detection', 'MODEL_NAME=%s' % args.model_name)
-        # r['command'] = r['command'].replace('MODEL_VERSION=1.0.0', 'MODEL_VERSION=%s' % args.model_version)
 
         LOG.info("Start task %s..." % t.name)
 

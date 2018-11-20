@@ -22,7 +22,7 @@ def main():
     targs.append("--model_dir")
     targs.append("%s/%s" % (args.training_dir, args.build_id))
 
-    # print(check_output(targs))
+    print(check_output(targs))
 
     # m = client.Client()
     client.Client().update_task_info({
@@ -30,8 +30,8 @@ def main():
         'train_checkpoint': args.num_steps,
     })
 
-    print(targs)
-    return
+    # print(targs)
+    # return
 
 
 

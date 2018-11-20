@@ -35,15 +35,23 @@ def main():
     targs.append("%s/model/%s" % (args.training_dir, args.train_build_id))
 
 
-    # print(check_output(targs))
+    print(check_output(targs))
 
-    print(targs)
+    # print(targs)
 
     m = client.Client()
-    print(args.model_name, args.model_version, '%s/model/%s/saved_model' % (args.training_dir, args.train_build_id))
-    # m.model_upload('$MODEL_NAME', '$MODEL_VERSION', '$TRAINING_DIR/model/$BUILD/saved_model')
+    # print(args.model_name, args.model_version, '%s/model/%s/saved_model' % (args.training_dir, args.train_build_id))
+    m.model_upload(
+        args.model_name,
+        args.model_version,
+        '%s/model/%s/saved_model' % (args.training_dir, args.train_build_id),
+    )
     m.update_task_info({
-        'model': '#/%s/catalog/mlmodel/%s/versions/%s' % (os.environ['WORKSPACE_NAME'], args.model_name, args.model_version),
+        'model': '#/%s/catalog/mlmodel/%s/versions/%s' % (
+            os.environ['WORKSPACE_NAME'],
+            args.model_name,
+            args.model_version,
+        ),
     })
 
     # BUILD=1; CHECKPOINT=1000; MODEL_NAME=object-detection; MODEL_VERSION=1.0.0;

@@ -3,6 +3,7 @@ from subprocess import check_output
 from argparse import ArgumentParser
 import sys
 
+from mlboardclient.api import client
 
 def main():
     build_config()
@@ -10,6 +11,7 @@ def main():
     parser.add_argument('--training_dir')
     parser.add_argument('--research_dir')
     parser.add_argument('--build_id')
+    parser.add_argument('--num_steps')
     args, _ = parser.parse_known_args()
 
     targs = sys.argv[:]
@@ -20,10 +22,16 @@ def main():
     targs.append("--model_dir")
     targs.append("%s/%s" % (args.training_dir, args.build_id))
 
+    # print(check_output(targs))
+
+    m = client.Client()
+    parser.add_argument('--train_build_id')
+    parser.add_argument('--train_checkpoint')
+    m.update_task_info({'train_build_id': args.build_id, 'train_checkpoint': args.num_steps})
+
     print(targs)
     return
 
-    print(check_output(targs))
 
 
 if __name__ == '__main__':

@@ -12,7 +12,7 @@ def main():
     parser.add_argument('--research_dir')
     parser.add_argument('--training_dir')
     parser.add_argument('--train_build_id')
-    parser.add_argument('--num_steps')
+    parser.add_argument('--train_checkpoint')
     # parser.add_argument('--num_steps', default=50000)
     args, _ = parser.parse_known_args()
 
@@ -27,7 +27,7 @@ def main():
     targs.append("faster_rcnn_resnet101_pets.config")
 
     targs.append("--trained_checkpoint_prefix")
-    targs.append("%s/%s/model.ckpt-%s" % (args.training_dir, args.train_build_id, args.num_steps))
+    targs.append("%s/%s/model.ckpt-%s" % (args.training_dir, args.train_build_id, args.train_checkpoint))
 
     targs.append("--output_directory")
     targs.append("%s/model/%s" % (args.training_dir, args.train_build_id))

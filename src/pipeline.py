@@ -54,8 +54,8 @@ def get_parser():
     parser.add_argument('--resize_fixed_height')
     parser.add_argument('--train_build_id')
     parser.add_argument('--train_checkpoint')
-    parser.add_argument('--grid_scales')
-    parser.add_argument('--grid_aspect_ratios')
+    parser.add_argument('--grid_scales', nargs='*')
+    parser.add_argument('--grid_aspect_ratios', nargs='*')
 
     return parser
 

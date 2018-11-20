@@ -32,10 +32,11 @@ def main():
     targs.append("--output_directory")
     targs.append("%s/model/%s" % (args.training_dir, args.build))
 
-    print(check_output(targs))
-
     print(targs)
     return
+
+    print(check_output(targs))
+
 
     m = client.Client()
     m.model_upload('$MODEL_NAME', '$MODEL_VERSION', '$TRAINING_DIR/model/$BUILD/saved_model')

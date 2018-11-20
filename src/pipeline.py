@@ -56,15 +56,12 @@ def get_parser():
     parser.add_argument('--train_checkpoint')
     parser.add_argument('--grid_scales', nargs='*')
     parser.add_argument('--grid_aspect_ratios', nargs='*')
-
     return parser
 
 
 def main():
     parser = get_parser()
     args, _ = parser.parse_known_args()
-
-    print('known_args', args)
 
     override_args = {
         '_common': {
@@ -100,11 +97,6 @@ def main():
                 override_args[t.name]['train_checkpoint'] = train_checkpoint
             override_task_arguments(t, override_args[t.name])
         override_task_arguments(t, override_args['_common'])
-
-        print('task %s' % t.name)
-        r = t.config['resources'][0]
-        print('command %s' % r['command'])
-        print('arguments', r['args'])
 
         LOG.info("Start task %s..." % t.name)
 

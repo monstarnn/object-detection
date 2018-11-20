@@ -5,6 +5,7 @@ import sys
 
 from mlboardclient.api import client
 
+
 def main():
     build_config()
     parser = ArgumentParser()
@@ -24,15 +25,10 @@ def main():
 
     print(check_output(targs))
 
-    # m = client.Client()
     client.Client().update_task_info({
         'train_build_id': args.build_id,
         'train_checkpoint': args.num_steps,
     })
-
-    # print(targs)
-    # return
-
 
 
 if __name__ == '__main__':

@@ -12,24 +12,27 @@
   label: Train steps quantity
   type: int
   value: 1000
-- name: resize_min_dimension
-  label: Minimal resize dimension
-  type: int
-  value: 600
-  width: 50
-- name: resize_max_dimension
-  label: Miximal resize dimension
-  type: int
-  value: 1024
-  width: 50
-- name: resize_fixed_width
-  label: Fixed resize width
-  type: int
-  width: 50
-- name: resize_fixed_height
-  label: Fixed resize height
-  type: int
-  width: 50
+- label: Resize
+  type: group
+  elements:
+  - name: resize_min_dimension
+    label: Minimal resize dimension
+    type: int
+    value: 600
+    width: 50
+  - name: resize_max_dimension
+    label: Miximal resize dimension
+    type: int
+    value: 1024
+    width: 50
+  - name: resize_fixed_width
+    label: Fixed resize width
+    type: int
+    width: 50
+  - name: resize_fixed_height
+    label: Fixed resize height
+    type: int
+    width: 50
 - name: grid_scales
   label: Grid generator scales
   type: list

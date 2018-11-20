@@ -15,10 +15,7 @@ def main():
     parser.add_argument('--model_version')
     parser.add_argument('--train_build_id')
     parser.add_argument('--train_checkpoint')
-    # parser.add_argument('--num_steps', default=50000)
     args, _ = parser.parse_known_args()
-
-    print(args)
 
     targs = sys.argv[:]
 
@@ -34,13 +31,9 @@ def main():
     targs.append("--output_directory")
     targs.append("%s/model/%s" % (args.training_dir, args.train_build_id))
 
-
     print(check_output(targs))
 
-    # print(targs)
-
     m = client.Client()
-    # print(args.model_name, args.model_version, '%s/model/%s/saved_model' % (args.training_dir, args.train_build_id))
     m.model_upload(
         args.model_name,
         args.model_version,
@@ -53,15 +46,6 @@ def main():
             args.model_version,
         ),
     })
-
-    # BUILD=1; CHECKPOINT=1000; MODEL_NAME=object-detection; MODEL_VERSION=1.0.0;
-    # sed -i -e "s|%DATADIR%|$DATA_DIR|g" $SRC_DIR/faster_rcnn_resnet101_pets.config;
-    # python object_detection/export_inference_graph.py
-    # --input_type encoded_image_string_tensor
-    # --pipeline_config_path $SRC_DIR/faster_rcnn_resnet101_pets.config
-    # --trained_checkpoint_prefix $TRAINING_DIR/$BUILD/model.ckpt-${CHECKPOINT}
-    # --output_directory $TRAINING_DIR/model/$BUILD;
-    # python -c "from mlboardclient.api import client; m = client.Client(); m.model_upload('$MODEL_NAME', '$MODEL_VERSION', '$TRAINING_DIR/model/$BUILD/saved_model'); m.update_task_info({'model': '#/$WORKSPACE_NAME/catalog/mlmodel/$MODEL_NAME/versions/$MODEL_VERSION'})"
 
 
 if __name__ == '__main__':

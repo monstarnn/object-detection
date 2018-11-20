@@ -29,11 +29,6 @@ def build_config():
         'grid_aspect_ratios': args.grid_aspect_ratios,
     }
 
-    # print('!! grid_scales', targs['grid_scales'])
-    # print('!! 0', targs['grid_scales'][0])
-    # print('!! 1', targs['grid_scales'][1])
-    # print('!! grid_aspect_ratios', targs['grid_aspect_ratios'])
-
     if targs['resize_min_dimension'] == 0 or targs['resize_min_dimension'] == 0:
         targs['resize_min_dimension'] = 0
         targs['resize_max_dimension'] = 0
@@ -48,15 +43,11 @@ def build_config():
     if targs['data_dir'] == '':
         raise Exception('data_dir is not set')
 
-    # print(targs)
-    # print(targs['resize_min_dimension'])
-
     t = open("faster_rcnn_resnet101_pets.config.template", "r")
     template = jinja2.Template(t.read())
     t.close()
     tw = open("faster_rcnn_resnet101_pets.config", "w+")
     cfg = str(template.render(args=targs))
-    print(cfg)
     tw.write(cfg)
     tw.close()
 

@@ -18,7 +18,7 @@ def main():
     targs.append("--pipeline_config_path")
     targs.append("faster_rcnn_resnet101_pets.config")
     targs.append("--model_dir")
-    targs.append("%s/%s" % (args['training_dir'], args['build_id']))
+    targs.append("%s/%s" % (args.training_dir, args.build_id))
 
     print(targs)
     return

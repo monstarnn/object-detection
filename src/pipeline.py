@@ -64,6 +64,8 @@ def main():
     parser = get_parser()
     args, _ = parser.parse_known_args()
 
+    print('known_args', args)
+
     override_args = {
         'train': {
             'num_steps': args.num_steps,

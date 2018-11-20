@@ -11,6 +11,8 @@ def main():
     parser = ArgumentParser()
     parser.add_argument('--research_dir')
     parser.add_argument('--training_dir')
+    parser.add_argument('--model_name')
+    parser.add_argument('--model_version')
     parser.add_argument('--train_build_id')
     parser.add_argument('--train_checkpoint')
     # parser.add_argument('--num_steps', default=50000)

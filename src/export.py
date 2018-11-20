@@ -1,7 +1,7 @@
 from config import build_config
 from subprocess import check_output
 from argparse import ArgumentParser
-import sys
+import sys, os
 
 from mlboardclient.api import client
 
@@ -40,10 +40,10 @@ def main():
     print(targs)
 
     m = client.Client()
-    print(args.model_name, args.model_version, '$TRAINING_DIR/model/%s/saved_model' % (args.train_build_id))
+    print(args.model_name, args.model_version, '%s/model/%s/saved_model' % (args.training_dir, args.train_build_id))
     # m.model_upload('$MODEL_NAME', '$MODEL_VERSION', '$TRAINING_DIR/model/$BUILD/saved_model')
     m.update_task_info({
-        'model': '#/$WORKSPACE_NAME/catalog/mlmodel/%s/versions/%s' % (args.model_name, args.model_version),
+        'model': '#/%s/catalog/mlmodel/%s/versions/%s' % (os.environ['WORKSPACE_NAME'], args.model_name, args.model_version),
     })
 
     # BUILD=1; CHECKPOINT=1000; MODEL_NAME=object-detection; MODEL_VERSION=1.0.0;

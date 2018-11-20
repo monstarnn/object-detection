@@ -52,8 +52,8 @@ def get_parser():
     parser.add_argument('--resize_max_dimension')
     parser.add_argument('--resize_fixed_width')
     parser.add_argument('--resize_fixed_height')
-    parser.add_argument('--training_build_id')
-    parser.add_argument('--training_checkpoint')
+    parser.add_argument('--train_build_id')
+    parser.add_argument('--train_checkpoint')
 
     return parser
 
@@ -76,21 +76,23 @@ def main():
         'export': {
             'model_name': args.model_name,
             'model_version': args.model_version,
-            'training_build_id': args.training_build_id,
-            'training_checkpoint': args.training_checkpoint,
+            'train_build_id': args.train_build_id,
+            'train_checkpoint': args.train_checkpoint,
         }
     }
 
     app = mlboard.apps.get()
 
-    training_build_id = ''
-    training_checkpoint = ''
+    train_build_id = ''
+    train_checkpoint = ''
 
     for task in run_tasks:
         t = app.tasks.get(task)
         if t.name in override_args and override_args[t.name]:
-            if 'training_build_id' in override_args[t.name]:
-                override_args[t.name]['training_build_id'] = training_build_id
+            if 'train_build_id' in override_args[t.name]:
+                override_args[t.name]['train_build_id'] = train_build_id
+            if 'train_checkpoint' in override_args[t.name]:
+                override_args[t.name]['train_checkpoint'] = train_checkpoint
             override_task_arguments(t, override_args[t.name])
 
         print('task %s' % t.name)
@@ -131,9 +133,9 @@ def main():
             % (completed.name, completed.build, completed.status)
         )
 
-        if t.name == 'training':
-            training_build_id = completed.build
-            training_checkpoint = args.num_steps
+        if t.name == 'train':
+            train_build_id = completed.build
+            train_checkpoint = args.num_steps
 
     LOG.info("Workflow completed with status SUCCESS")
 

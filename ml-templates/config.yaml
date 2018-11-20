@@ -49,8 +49,8 @@ spec:
         --research_dir $RESEARCH_DIR
         --data_dir $DATA_DIR
         --training_dir $TRAINING_DIR
-        --training_build_id 1
-        --checkpoint 1000
+        --train_build_id 1
+        --train_checkpoint 1000
       workdir: "$SRC_DIR"
       resources:
         accelerators:

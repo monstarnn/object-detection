@@ -15,7 +15,7 @@ logging.basicConfig(level=logging.INFO)
 LOG = logging.getLogger(__name__)
 mlboard = client.Client()
 run_tasks = [
-    # 'train',
+    'train',
     'export',
 ]
 
@@ -81,7 +81,7 @@ def main():
 
     app = mlboard.apps.get()
 
-    last_build = '10'
+    last_build = ''
 
     for task in run_tasks:
         t = app.tasks.get(task)

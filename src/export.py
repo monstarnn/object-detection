@@ -9,8 +9,8 @@ from mlboardclient.api import client
 def main():
     build_config()
     parser = ArgumentParser()
-    parser.add_argument('--model_dir')
     parser.add_argument('--research_dir')
+    parser.add_argument('--training_dir')
     parser.add_argument('--build')
     parser.add_argument('--num_steps')
     # parser.add_argument('--num_steps', default=50000)
@@ -27,10 +27,10 @@ def main():
     targs.append("faster_rcnn_resnet101_pets.config")
 
     targs.append("--trained_checkpoint_prefix")
-    targs.append("$TRAINING_DIR/%s/model.ckpt-%s" % (args.build, args.num_steps))
+    targs.append("%s/%s/model.ckpt-%s" % (args.training_dir, args.build, args.num_steps))
 
     targs.append("--output_directory")
-    targs.append("$TRAINING_DIR/model/%s" % args.build)
+    targs.append("%s/model/%s" % (args.training_dir, args.build))
 
     print(check_output(targs))
 

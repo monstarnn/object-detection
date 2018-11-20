@@ -14,15 +14,19 @@ def build_config():
     parser.add_argument('--resize_max_dimension', type=positive_int, default=1024)
     parser.add_argument('--resize_fixed_width', type=positive_int, default=0)
     parser.add_argument('--resize_fixed_height', type=positive_int, default=0)
+    parser.add_argument('--grid_scales')
+    parser.add_argument('--grid_aspect_ratios')
     args, _ = parser.parse_known_args()
 
     targs = {
         'data_dir': args.data_dir,
+        'num_steps': args.num_steps,
         'resize_min_dimension': args.resize_min_dimension,
         'resize_max_dimension': args.resize_max_dimension,
         'resize_fixed_width': args.resize_fixed_width,
         'resize_fixed_height': args.resize_fixed_height,
-        'num_steps': args.num_steps,
+        'grid_scales': args.grid_scales,
+        'grid_aspect_ratios': args.grid_aspect_ratios,
     }
 
     if targs['resize_min_dimension'] == 0 or targs['resize_min_dimension'] == 0:
@@ -39,7 +43,7 @@ def build_config():
     if targs['data_dir'] == '':
         raise Exception('data_dir is not set')
 
-    # print(targs)
+    print(targs)
     # print(targs['resize_min_dimension'])
 
     t = open("faster_rcnn_resnet101_pets.config.template", "r")

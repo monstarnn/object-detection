@@ -30,6 +30,8 @@ def build_config():
     }
 
     print('!! grid_scales', targs['grid_scales'])
+    print('!! 0', targs['grid_scales'][0])
+    print('!! 1', targs['grid_scales'][1])
     print('!! grid_aspect_ratios', targs['grid_aspect_ratios'])
 
     if targs['resize_min_dimension'] == 0 or targs['resize_min_dimension'] == 0:

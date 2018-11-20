@@ -54,6 +54,8 @@ def get_parser():
     parser.add_argument('--resize_fixed_height')
     parser.add_argument('--train_build_id')
     parser.add_argument('--train_checkpoint')
+    parser.add_argument('--grid_scales')
+    parser.add_argument('--grid_aspect_ratios')
 
     return parser
 
@@ -69,6 +71,8 @@ def main():
             'resize_max_dimension': args.resize_max_dimension,
             'resize_fixed_width': args.resize_fixed_width,
             'resize_fixed_height': args.resize_fixed_height,
+            'grid_scales': args.grid_scales,
+            'grid_aspect_ratios': args.grid_aspect_ratios,
             # 'research_dir': args.research_dir,
             # 'data_dir': args.data_dir,
             # 'model_dir': args.model_dir,
@@ -76,8 +80,8 @@ def main():
         'export': {
             'model_name': args.model_name,
             'model_version': args.model_version,
-            'train_build_id': args.train_build_id,
-            'train_checkpoint': args.train_checkpoint,
+            'train_build_id': '',
+            'train_checkpoint': '',
         }
     }
 

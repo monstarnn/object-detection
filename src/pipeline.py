@@ -39,7 +39,8 @@ def override_task_arguments(task, params):
             else:
                 resource['args'] = {k: v}
 
-            print("!!!!", k, type(resource['args'][k]), resource['args'][k])
+            print("!!!! type", k, type(resource['args'][k]))
+            print("!!!! val", k, resource['args'][k])
 
 
 def get_parser():

@@ -62,7 +62,7 @@ def main():
     parser = get_parser()
     args, _ = parser.parse_known_args()
 
-    LOG.info("sys.argv: ", sys.argv)
+    LOG.info(sys.argv)
 
     override_args = {
         '_common': {
@@ -102,8 +102,8 @@ def main():
         LOG.info("Start task %s..." % t.name)
 
         resource = t.config['resources'][0]
-        LOG.info("Command: ", resource['command'])
-        LOG.info("Arguments: ", resource['args'])
+        LOG.info(resource['command'])
+        LOG.info(resource['args'])
 
         started = t.start()
 

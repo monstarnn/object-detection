@@ -7,6 +7,9 @@ def main():
 
 def build_config():
 
+    print('sys.argv:')
+    print(sys.argv)
+
     parser = argparse.ArgumentParser()
 
     parser.add_argument('--data_dir', default='')
@@ -44,6 +47,9 @@ def build_config():
         'use_pretrained_checkpoint': args.use_pretrained_checkpoint,
         'pretrained_checkpoint_path': args.pretrained_checkpoint_path,
     }
+
+    print('targs:')
+    print(targs)
 
     if targs['resize_min_dimension'] == 0 or targs['resize_min_dimension'] == 0:
         targs['resize_min_dimension'] = 0

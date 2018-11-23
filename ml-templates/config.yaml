@@ -222,6 +222,16 @@ spec:
     {{- else }}
     clusterStorage: {{ .storage.value }}
     {{- end }}
+  - mountPath: /notebooks/pretrained
+    name: pretrained
+    {{- if .dataset.value }}
+    datasetFS:
+      dataset: {{ .dataset.value }}
+      workspace: {{ .dataset.workspace }}
+      version: {{ .dataset.version }}
+    {{- else }}
+    clusterStorage: {{ .storage.value }}
+    {{- end }}
   - mountPath: /notebooks/research
     name: research
     {{- if .code.value }}

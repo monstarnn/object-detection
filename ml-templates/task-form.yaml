@@ -39,17 +39,17 @@
   - name: tf_record_train_path
     label: TF record train path
     type: string
-    value: "$DATA_DIR/train.record"
+    value: "$DATA_DIR/pet_train_with_masks.record"
     width: 33
   - name: tf_record_test_path
     label: TF record tedt path
     type: string
-    value: "$DATA_DIR/test.record"
+    value: "$DATA_DIR/pet_val_with_masks.record"
     width: 33
   - name: label_map_path
     label: Labels map
     type: string
-    value: "$DATA_DIR/label_map.pbtxt"
+    value: "$DATA_DIR/pet_label_map.pbtxt"
     width: 33
   - name: use_pretrained_checkpoint
     label: Use pretrained checkpoint

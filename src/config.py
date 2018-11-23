@@ -66,11 +66,11 @@ def build_config():
         raise Exception('data_dir is not set')
 
     if targs['tf_record_train_path'] == '':
-        targs['tf_record_train_path'] = '%s/train.record' % targs['data_dir']
+        targs['tf_record_train_path'] = '%s/pet_train_with_masks.record' % targs['data_dir']
     if targs['tf_record_test_path'] == '':
-        targs['tf_record_test_path'] = '%s/test.record' % targs['data_dir']
+        targs['tf_record_test_path'] = '%s/pet_val_with_masks.record' % targs['data_dir']
     if targs['label_map_path'] == '':
-        targs['label_map_path'] = '%s/label_map.pbtxt' % targs['data_dir']
+        targs['label_map_path'] = '%s/pet_label_map.pbtxt' % targs['data_dir']
 
     if targs['pretrained_checkpoint_path'] == '':
         targs['pretrained_checkpoint_path'] = '%s/model.ckpt' % targs['data_dir']

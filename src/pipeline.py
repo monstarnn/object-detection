@@ -112,9 +112,11 @@ def main():
             % (started.name, started.build, started.status)
         )
         completed = started.wait()
+        completed.refresh()
 
         print('completed: ')
         print(completed)
+        print(completed.exec_info)
 
         if completed.status != SUCCEEDED:
             LOG.warning(

@@ -117,6 +117,7 @@ def main():
         print('completed: ')
         print(completed)
         print(completed.exec_info)
+        print(completed.exec_info['train_checkpoint'])
 
         if completed.status != SUCCEEDED:
             LOG.warning(

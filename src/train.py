@@ -26,10 +26,7 @@ def main():
 
     call(targs)
 
-    client.Client().update_task_info({
-        'train_build_id': args.build_id,
-        'train_checkpoint': args.num_steps,
-    })
+    client.Client().update_task_info({'train_build_id': args.build_id})
 
 
 if __name__ == '__main__':

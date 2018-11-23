@@ -112,12 +112,12 @@ def main():
             % (started.name, started.build, started.status)
         )
         completed = started.wait()
-        completed.refresh()
 
-        print('completed: ')
-        print(completed)
-        print(completed.exec_info)
-        print(completed.exec_info['train_checkpoint'])
+        # completed.refresh()
+        # print('completed: ')
+        # print(completed)
+        # print(completed.exec_info)
+        # print(completed.exec_info['train_checkpoint'])
 
         if completed.status != SUCCEEDED:
             LOG.warning(
@@ -136,9 +136,11 @@ def main():
             % (completed.name, completed.build, completed.status)
         )
 
-        if t.name == 'train':
+        if completed.name == 'train':
+            completed.refresh()
             train_build_id = completed.build
-            train_checkpoint = args.num_steps
+            if completed.exec_info and 'train_checkpoint' in completed.exec_info:
+                train_checkpoint = completed.exec_info['train_checkpoint']
 
     LOG.info("Workflow completed with status SUCCESS")
 

@@ -32,7 +32,7 @@ def main():
     targs.append("%s/model/%s" % (args.training_dir, args.train_build_id))
 
     targs.append("--input_type")
-    targs.append("--encoded_image_string_tensor")
+    targs.append("encoded_image_string_tensor")
 
     call(targs)
 

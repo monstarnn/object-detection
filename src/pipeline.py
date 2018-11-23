@@ -55,6 +55,11 @@ def get_parser():
     parser.add_argument('--train_checkpoint')
     parser.add_argument('--grid_scales', nargs='*')
     parser.add_argument('--grid_aspect_ratios', nargs='*')
+    parser.add_argument('--tf_record_train_path')
+    parser.add_argument('--tf_record_test_path')
+    parser.add_argument('--label_map_path')
+    parser.add_argument('--use_pretrained_checkpoint')
+    parser.add_argument('--pretrained_checkpoint_path')
     return parser
 
 

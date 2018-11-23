@@ -108,6 +108,9 @@ def main():
         )
         completed = started.wait()
 
+        print('completed: ')
+        print(completed)
+
         if completed.status != SUCCEEDED:
             LOG.warning(
                 "Task %s-%s completed with status %s."

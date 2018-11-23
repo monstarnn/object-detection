@@ -12,7 +12,7 @@ def main():
     parser.add_argument('--training_dir')
     parser.add_argument('--research_dir')
     parser.add_argument('--build_id')
-    parser.add_argument('--num_steps')
+    parser.add_argument('--num_steps', default=1000)
     parser.add_argument('--only_train', default='False')
     args, _ = parser.parse_known_args()
 

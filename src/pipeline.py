@@ -68,13 +68,13 @@ def main():
         '_common': {
             'grid_scales': args.grid_scales,
             'grid_aspect_ratios': args.grid_aspect_ratios,
-        },
-        'train': {
-            'num_steps': args.num_steps,
             'resize_min_dimension': args.resize_min_dimension,
             'resize_max_dimension': args.resize_max_dimension,
             'resize_fixed_width': args.resize_fixed_width,
             'resize_fixed_height': args.resize_fixed_height,
+        },
+        'train': {
+            'num_steps': args.num_steps,
         },
         'export': {
             'model_name': args.model_name,

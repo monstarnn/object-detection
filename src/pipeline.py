@@ -3,8 +3,7 @@
 ##
 import argparse
 import logging
-import re
-import sys
+import re, sys
 
 from mlboardclient.api import client
 
@@ -63,6 +62,8 @@ def main():
     parser = get_parser()
     args, _ = parser.parse_known_args()
 
+    LOG.info("sys.argv: ", sys.argv)
+
     override_args = {
         '_common': {
             'grid_scales': args.grid_scales,
@@ -99,6 +100,10 @@ def main():
         override_task_arguments(t, override_args['_common'])
 
         LOG.info("Start task %s..." % t.name)
+
+        resource = t.config['resources'][0]
+        LOG.info("Command: ", resource['command'])
+        LOG.info("Arguments: ", resource['args'])
 
         started = t.start()
 

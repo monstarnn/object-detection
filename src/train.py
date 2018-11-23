@@ -20,7 +20,7 @@ def main():
     targs[0] = args.research_dir + '/object_detection/model_main.py'
     targs.insert(0, sys.executable or 'python')
     targs.append("--pipeline_config_path")
-    targs.append("faster_rcnn_resnet101_pets.config")
+    targs.append("faster_rcnn.config")
     targs.append("--model_dir")
     targs.append("%s/%s" % (args.training_dir, args.build_id))
 

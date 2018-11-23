@@ -23,7 +23,7 @@ def main():
     targs.insert(0, sys.executable or 'python')
 
     targs.append("--pipeline_config_path")
-    targs.append("faster_rcnn_resnet101_pets.config")
+    targs.append("faster_rcnn.config")
 
     targs.append("--trained_checkpoint_prefix")
     targs.append("%s/%s/model.ckpt-%s" % (args.training_dir, args.train_build_id, args.train_checkpoint))
